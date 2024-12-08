@@ -31,7 +31,6 @@ public class Connect {
 			con = DriverManager.getConnection(CONNECTION, USERNAME, PASSWORD);
 			st = con.createStatement();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -41,7 +40,6 @@ public class Connect {
 			rs = st.executeQuery(query);
 			rsm = rs.getMetaData();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return rs;
@@ -51,7 +49,6 @@ public class Connect {
 		try {
 			st.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -62,7 +59,6 @@ public class Connect {
 		try {
 			ps = con.prepareStatement(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ps;
