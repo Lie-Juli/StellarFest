@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 
+import controller.AdminController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +40,7 @@ public class UserView implements EventHandler<ActionEvent>{
 	private Button viewUserBtn;
 	
 	private Connect connect = Connect.getInstance();
+	private AdminController adminController = new AdminController();
 	
 	private ArrayList<User> userList;
 	
@@ -95,11 +97,9 @@ public class UserView implements EventHandler<ActionEvent>{
 		table.getColumns().addAll(idColumn, emailColumn, usernameColumn, passwordColumn, roleColumn);
 	}
 	
-	public void refreshTable() {
-		getUser();
-		ObservableList<User> users = FXCollections.observableArrayList(userList);
+	public void viewAllUser() {
+		ObservableList<User> users = adminController.viewAllUser(userList, connect);
 		table.setItems(users);
-		
 	}
 	
 	public UserView(Stage stage) {
@@ -107,32 +107,12 @@ public class UserView implements EventHandler<ActionEvent>{
 		init();
 		addComponent();
 		setTable();
-		refreshTable();
+		viewAllUser();
 		stage.setTitle("Users");
 		stage.setScene(scene);
 		stage.show();
 	}
-	
-	public void getUser() {
-		userList.clear();
-		//Select query from DB
-		String query = "SELECT * FROM users";
-		connect.rs = connect.execQuery(query);
-		
-		try {
-			while (connect.rs.next()) {
-				Integer id = connect.rs.getInt("id");
-				String email = connect.rs.getString("email");
-				String username = connect.rs.getString("username");
-				String password = connect.rs.getString("password");
-				String role = connect.rs.getString("role");
-				userList.add(new User(id, email, username, password, role));
-			}
-		} catch (Exception e) {
-			
-		}
-		
-	}
+
 
 	public void handle(ActionEvent event) {
 		if (event.getSource() == deleteBtn) {
@@ -140,10 +120,15 @@ public class UserView implements EventHandler<ActionEvent>{
 				errorLabel.setText("Input vield can't be empty!");
 			}else {
 				String id = idInput.getText();
-				String query = String.format("DELETE FROM users WHERE id = %s", id);
-				connect.execUpdate(query);
-				refreshTable();
-				errorLabel.setText("Data deleted!");
+				Boolean valid = adminController.deleteUser(id, connect);
+
+				if (valid) {
+					errorLabel.setText("Data deleted!");
+				}else {
+					errorLabel.setText("Enter a valid id!");
+				}
+				viewAllUser();
+				
 			}
 		}
 		else if (event.getSource() == viewEventBtn) {

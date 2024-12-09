@@ -3,6 +3,7 @@ package view;
 import java.io.Console;
 import java.util.ArrayList;
 
+import controller.AdminController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,6 +39,7 @@ public class EventView implements EventHandler<ActionEvent>{
 	private Button viewUserBtn;
 	
 	private Connect connect = Connect.getInstance();
+	private AdminController adminController = new AdminController();
 	
 	private ArrayList<Event> eventList;
 	
@@ -96,9 +98,8 @@ public class EventView implements EventHandler<ActionEvent>{
 		
 	}
 	
-	public void refreshTable() {
-		getEvent();
-		ObservableList<Event> events = FXCollections.observableArrayList(eventList);
+	public void viewAllEvent() {
+		ObservableList<Event> events = adminController.viewAllEvent(eventList, connect);
 		table.setItems(events);
 	}
 	
@@ -107,30 +108,10 @@ public class EventView implements EventHandler<ActionEvent>{
 		init();
 		addComponent();
 		setTable();
-		refreshTable();
+		viewAllEvent();
 		stage.setTitle("Events");
 		stage.setScene(scene);
 		stage.show();
-	}
-	
-	public void getEvent() {
-		eventList.clear();
-		//Select query from DB
-		String query = "SELECT * FROM events";
-		connect.rs = connect.execQuery(query);
-		
-		try {
-			while (connect.rs.next()) {
-				Integer id = connect.rs.getInt("id");
-				String name = connect.rs.getString("name");
-				String date = connect.rs.getString("date");
-				String location = connect.rs.getString("location");
-				String description = connect.rs.getString("description");
-				eventList.add(new Event(id, name, date, location, description));
-			}
-		} catch (Exception e) {
-			
-		}
 	}
 
 	@Override
@@ -140,10 +121,15 @@ public class EventView implements EventHandler<ActionEvent>{
 				errorLabel.setText("Input vield can't be empty!");
 			}else {
 				String id = idInput.getText();
-				String query = String.format("DELETE FROM events WHERE id = %s", id);
-				connect.execUpdate(query);
-				refreshTable();
-				errorLabel.setText("Data deleted!");
+				Boolean valid = adminController.deleteEvent(id, connect);
+
+				if (valid) {
+					errorLabel.setText("Data deleted!");
+				}else {
+					errorLabel.setText("Enter a valid id!");
+				}
+				viewAllEvent();
+				
 			}
 		}
 		else if (event.getSource() == viewEventBtn) {

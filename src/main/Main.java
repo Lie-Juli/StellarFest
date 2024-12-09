@@ -13,6 +13,7 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		// gw ubah ke EventView smentara - William
 		new EventView(primaryStage);
 		primaryStage.show();
 	}
