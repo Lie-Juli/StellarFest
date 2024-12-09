@@ -24,7 +24,8 @@ public class User {
 		this.password = password;
 		this.role = role;
 	}
-
+	
+	//getter setter
 	public int getUserID() {
 		return userID;
 	}

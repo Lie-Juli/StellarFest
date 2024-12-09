@@ -61,6 +61,7 @@ public class RegisterView {
 		stage.show();
 	}
 	
+	// hal yang dilakukan ketika menekan suatu button
 	private void setBtnAction(Stage stage) {
 		// jika menekan login button akan menredirect ke login view
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {

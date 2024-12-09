@@ -22,7 +22,7 @@ public class UserController {
 		return User.login(email, password);
 	}
 	
-	// memanggil function checRegisterInput dari model
+	// memanggil function checRegisterInput dari model yang akan memvalidasi input dari register
 	public static String checkRegisterInput(String email, String username, String password, String role){
 		return User.checkRegisterInput(email, username, password, role);
 	}
