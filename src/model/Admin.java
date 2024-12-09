@@ -6,6 +6,8 @@ public class Admin extends User{
 		super(userID, email, username, password, role);
 	}
 
-	
+	public void addEvent(String name, String date, String location, String description) {
+		
+	}
 
 }

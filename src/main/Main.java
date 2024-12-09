@@ -2,6 +2,7 @@ package main;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.EventView;
 import view.LoginView;
 
 public class Main extends Application{
@@ -12,7 +13,7 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		new LoginView(primaryStage);
+		new EventView(primaryStage);
 		primaryStage.show();
 	}
 
