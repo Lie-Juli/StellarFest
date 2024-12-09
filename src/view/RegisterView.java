@@ -72,12 +72,23 @@ public class RegisterView {
 			
 		});
 		
+		// jika menekan register button akan mendapatkan isi dari textfield email, username, passwordfield password dan combobox role dan menjalanakan fungsi register dari controller
+		// jika registrasi berhasil melewati validasi akan ke rediret ke loginview, jika tidak berhasil melewati semua validasi akan muncul error messagenya
 		RegistBtn.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				new RegisterView(stage);
-				
+				String email = emailTxt.getText();
+				String username = usernameTxt.getText();
+				String password = passwordTxt.getText();
+				String role = role_cb.getValue();
+				String message = UserController.register(email, username, password, role);
+				if(message.equals("register success")) {
+					new LoginView(stage);
+				}
+				else {
+					errorLbl.setText(message);
+				}
 			}
 		});
 	}

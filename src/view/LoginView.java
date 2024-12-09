@@ -54,7 +54,7 @@ public class LoginView{
 
 	// hal yang dilakukan ketika menekan suatu button
 	private void setBtnAction() {
-		// jika menekan login button akan mendapatkan isi dari textfield email dan password field password dan menjalanakan fungsi login dari controller, 
+		// jika menekan login button akan mendapatkan isi dari textfield email dan passwordfield password dan menjalanakan fungsi login dari controller, 
 		// jika user tidak ada akan muncul error messeage
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 			

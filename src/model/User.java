@@ -119,15 +119,15 @@ public class User {
 	//untuk validasi input dari register
 	public static String checkRegisterInput(String email, String username, String password, String role) {
 		// jika email kosong
-		if(email == null) {
+		if(email.isEmpty()) {
 			return "email cannot be empty!";
 		}
 		// jika username kosong
-		else if(username == null) {
+		else if(username.isEmpty()) {
 			return "username cannot be empty!";
 		}
 		// jika password kosong
-		else if(password == null) {
+		else if(password.isEmpty()) {
 			return "password cannot be empty!";
 		}
 		// jika password kurang dari 5 karakter
@@ -135,7 +135,7 @@ public class User {
 			return "password length must be greater than 5!";
 		}
 		// jika role tidak dipilih oleh user
-		if(role == null) {
+		if(role.isEmpty()) {
 			return "role must be chosen";
 		}
 		
