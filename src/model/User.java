@@ -9,13 +9,13 @@ import util.Connect;
 public class User {
 	private static Connect con = Connect.getInstance();
 	
-	private String userID;
+	private int userID;
 	private String email;
 	private String username;
 	private String password;
 	private String role;
 	
-	public User(String userID, String email, String username, String password, String role) {
+	public User(int userID, String email, String username, String password, String role) {
 		super();
 		this.userID = userID;
 		this.email = email;
@@ -24,10 +24,10 @@ public class User {
 		this.role = role;
 	}
 
-	public String getUserID() {
+	public int getUserID() {
 		return userID;
 	}
-	public void setUserID(String userID) {
+	public void setUserID(int userID) {
 		this.userID = userID;
 	}
 	public String getEmail() {
@@ -85,7 +85,7 @@ public class User {
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				String id = rs.getString("userID");
+				int id = rs.getInt("userID");
 				String user_email = rs.getString("email");
 				String username = rs.getString("username");
 				String user_password = rs.getString("password");
@@ -123,11 +123,57 @@ public class User {
 			if(rs.next()) {
 				return "email already taken or username already taken";
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		return "success";
+	}
+	
+	public static User getUserByEmail(String email) {
+		String query = "SELECT * FROM users WHERE email = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		User user = null;
+		
+		try {
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				int id = rs.getInt("userID");
+				String user_email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				user = new User(id, user_email, username, password, role);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return user;
+	}
+	
+	public static User getUserByUsername(String name) {
+		String query = "SELECT * FROM users WHERE username = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		User user = null;
+		
+		try {
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				int id = rs.getInt("userID");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				user = new User(id, email, username, password, role);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return user;
 	}
 	
 }

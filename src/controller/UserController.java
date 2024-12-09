@@ -16,8 +16,8 @@ public class UserController {
 		
 	}
 	
-	public static User login(String username, String password) {
-		return User.login(username, password);
+	public static User login(String email, String password) {
+		return User.login(email, password);
 	}
 	
 	public static String checkRegisterInput(String email, String username, String password){
