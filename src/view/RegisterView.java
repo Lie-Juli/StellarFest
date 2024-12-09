@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import model.User;
 
 public class RegisterView {
-
+	//component-component yang dibutuhkan
 	Scene scene;
 	
 	Button loginBtn, RegistBtn;
@@ -23,6 +23,7 @@ public class RegisterView {
 	
 	String role[] = {"event organizer", "vendor", "guest"};
 	 
+	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		emailLbl = new Label();
 		emailLbl.setText("Email");
@@ -51,6 +52,7 @@ public class RegisterView {
 		scene = new Scene(vbox, 700, 500);
 	}
 	
+	// pembuatan stage yang akan menunjukan register view
 	public RegisterView(Stage stage) {
 		init();
 		setBtnAction(stage);
@@ -60,6 +62,7 @@ public class RegisterView {
 	}
 	
 	private void setBtnAction(Stage stage) {
+		// jika menekan login button akan menredirect ke login view
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

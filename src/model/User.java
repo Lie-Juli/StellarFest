@@ -56,7 +56,7 @@ public class User {
 		this.role = role;
 	}
 	
-	//logic untuk melakukan register user baru yang kemudian akan dimasukan kedalam database
+	//fungsi untuk melakukan register user baru yang kemudian akan dimasukan kedalam database
 	public static int register(String email, String username, String password, String role) {
 		String query = "INSERT INTO users(email, username, password, role) VALUES(?, ?, ?, ?)";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -76,7 +76,7 @@ public class User {
 		return success;
 	}
 	
-	//logic untuk melakukan login
+	//fungsi untuk melakukan login
 	public static User login(String email, String password) {
 		String query = "SELECT * FROM users WHERE email = ? and password = ?";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -159,7 +159,7 @@ public class User {
 		return "success";
 	}
 	
-	// logic untuk mendapatkan suatu user bedasarakan emailnya
+	// fungsi untuk mendapatkan suatu user bedasarakan emailnya
 	public static User getUserByEmail(String email) {
 		String query = "SELECT * FROM users WHERE email = ?";
 		PreparedStatement ps = con.prepareStatement(query);
@@ -184,7 +184,7 @@ public class User {
 	}
 	
 	
-	// logic untuk mendapatkan suatu user bedasarakan usernamenya
+	// fungsi untuk mendapatkan suatu user bedasarakan usernamenya
 	public static User getUserByUsername(String name) {
 		String query = "SELECT * FROM users WHERE username = ?";
 		PreparedStatement ps = con.prepareStatement(query);
