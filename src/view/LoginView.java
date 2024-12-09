@@ -62,12 +62,20 @@ public class LoginView{
 			public void handle(ActionEvent event) {
 				String email = emailTxt.getText();
 				String password = passwordTxt.getText();
-				User user = UserController.login(email, password);
-				if(user == null) {
-					errorLbl.setText("User Not Found");
+				if(email.isEmpty()) {
+					errorLbl.setText("Please fill your Email");
+				}
+				else if(password.isEmpty()) {
+					errorLbl.setText("Please fill your password");
 				}
 				else {
-					errorLbl.setText("User Found");
+					User user = UserController.login(email, password);
+					if(user == null) {
+						errorLbl.setText("User Not Found");
+					}
+					else {
+						errorLbl.setText("User Found");
+					}
 				}
 			}
 			
