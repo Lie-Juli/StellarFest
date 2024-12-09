@@ -7,7 +7,7 @@ public class Connect {
 	private final String USERNAME = "root";
 	private final String PASSWORD = "";
 	private final String HOST = "localhost:3306";
-	private final String DATABASE = "stellar_fest";
+	private final String DATABASE = "stellarfest";
 	private final String CONNECTION = String.format("jdbc:mysql://%s/%s", HOST, DATABASE);
 	
 	public ResultSet rs;
