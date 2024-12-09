@@ -10,34 +10,39 @@ import javafx.stage.Stage;
 import model.User;
 
 public class LoginView{
-
+	
+	//component-component yang dibutuhkan
 	Stage stage;
 	Scene scene;
 	
 	Button loginBtn, RegistBtn;
-	Label emailLbl, passwordLbl;
+	Label emailLbl, passwordLbl, errorLbl;
 	TextField emailTxt;
 	PasswordField passwordTxt;
 	
 	VBox vbox;
 	
+	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		emailLbl = new Label();
-		emailLbl.setText("Enter Your Email");
+		emailLbl.setText("Email");
 		
 		passwordLbl = new Label();
-		passwordLbl.setText("Enter Your Password");
+		passwordLbl.setText("Password");
+		
+		errorLbl = new Label();
 		
 		emailTxt = new TextField();
 		passwordTxt = new PasswordField();
 		
 		loginBtn = new Button("Login");
-		RegistBtn = new Button("Already Have an Account, Register Here!");
+		RegistBtn = new Button("Don't Have an Account, Register Here!");
 		
-		vbox = new VBox(10, emailLbl, emailTxt, passwordLbl, passwordTxt, loginBtn, RegistBtn);
+		vbox = new VBox(10, emailLbl, emailTxt, passwordLbl, passwordTxt, loginBtn, RegistBtn, errorLbl);
 		scene = new Scene(vbox, 700, 500);
 	}
 	
+	// pembuatan stage yang akan menunjukan login view
 	public LoginView(Stage stage) {
 		this.stage = stage;
 		init();
@@ -47,21 +52,37 @@ public class LoginView{
 		stage.show();
 	}
 
+	// hal yang dilakukan ketika menekan suatu button
 	private void setBtnAction() {
+		// jika menekan login button akan mendapatkan isi dari textfield email dan password field password dan menjalanakan fungsi login dari controller, 
+		// jika user tidak ada akan muncul error messeage
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-
+			
 			@Override
 			public void handle(ActionEvent event) {
 				String email = emailTxt.getText();
 				String password = passwordTxt.getText();
 				User user = UserController.login(email, password);
 				if(user == null) {
-					System.out.println("User Not Found");
+					errorLbl.setText("User Not Found");
 				}
-				
+				else {
+					errorLbl.setText("User Found");
+				}
 			}
 			
 		});
+		
+		// jika menekan regsiter button akan menredirect ke register view
+		RegistBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				new RegisterView(stage);
+				
+			}
+		});
+		
 	}
 
 }
