@@ -5,4 +5,8 @@ module StellarFest {
 	requires javafx.controls;
 	
 	opens main;
+	opens view;
+	opens model;
+	opens controller;
+	opens util;
 }

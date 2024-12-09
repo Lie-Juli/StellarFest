@@ -9,13 +9,13 @@ import util.Connect;
 public class User {
 	private static Connect con = Connect.getInstance();
 	
-	private int userID;
+	private String userID;
 	private String email;
 	private String username;
 	private String password;
 	private String role;
 	
-	public User(int userID, String email, String username, String password, String role) {
+	public User(String userID, String email, String username, String password, String role) {
 		super();
 		this.userID = userID;
 		this.email = email;
@@ -24,10 +24,10 @@ public class User {
 		this.role = role;
 	}
 
-	public int getUserID() {
+	public String getUserID() {
 		return userID;
 	}
-	public void setUserID(int userID) {
+	public void setUserID(String userID) {
 		this.userID = userID;
 	}
 	public String getEmail() {
@@ -85,7 +85,7 @@ public class User {
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				int id = rs.getInt("userID");
+				String id = rs.getString("userID");
 				String user_email = rs.getString("email");
 				String username = rs.getString("username");
 				String user_password = rs.getString("password");
@@ -97,7 +97,37 @@ public class User {
 		}
 		
 		return user;
+	}
+	
+	public static String checkRegisterInput(String email, String username, String password) {
+		if(email == null) {
+			return "email cannot be empty!";
+		}
+		else if(username == null) {
+			return "username cannot be empty!";
+		}
+		else if(password == null) {
+			return "password cannot be empty!";
+		}
+		else if(password.length() < 5) {
+			return "password length must be greater than 5!";
+		}
 		
+		String query = "SELECT * FROM users WHERE email = ? or username = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setString(1, email);
+			ps.setString(2, username);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return "email already taken or username already taken";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "success";
 	}
 	
 }
