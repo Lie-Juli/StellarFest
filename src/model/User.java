@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import util.Connect;
 
 public class User {
+	// untuk koneksi dengan database
 	private static Connect con = Connect.getInstance();
 	
 	// data-data apa saja yang akan dimiliki user
@@ -94,20 +95,26 @@ public class User {
 				String username = rs.getString("username");
 				String user_password = rs.getString("password");
 				String role = rs.getString("role");
-				//bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
-				// jika ditemukan event organizer akan dibuat event organizer yang baru, dan jika ditemukan vendor akan dibuat vendor baru
-				// ini digunakan untuk menentukan user apa yang sedang menggunakan sistem sehingga dapat menyesuaikan view dan fitur-fitur apa saja yang dapat digunakan user tersebut
-				if(role.equals("admin")) {
-					user = new Admin(id, user_email, username, user_password, role);
+				// pengecekan untuk memastikan bahwa email dan password harus sama persis
+				if(user_email.equals(email) && user_password.equals(password)) {
+					//bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
+					// jika ditemukan event organizer akan dibuat event organizer yang baru, dan jika ditemukan vendor akan dibuat vendor baru
+					// ini digunakan untuk menentukan user apa yang sedang menggunakan sistem sehingga dapat menyesuaikan view dan fitur-fitur apa saja yang dapat digunakan user tersebut
+					if(role.equals("admin")) {
+						user = new Admin(id, user_email, username, user_password, role);
+					}
+					else if(role.equals("guest")) {
+						user = new Guest(id, user_email, username, user_password, role);
+					}
+					else if(role.equals("event organizer")) {
+						user = new EventOrganizer(id, user_email, username, user_password, role);
+					}
+					else if(role.equals("vendor")) {
+						user = new Vendor(id, user_email, username, user_password, role);
+					}
 				}
-				else if(role.equals("guest")) {
-					user = new Guest(id, user_email, username, user_password, role);
-				}
-				else if(role.equals("event organizer")) {
-					user = new EventOrganizer(id, user_email, username, user_password, role);
-				}
-				else if(role.equals("vendor")) {
-					user = new Vendor(id, user_email, username, user_password, role);
+				else {
+					user = null;
 				}
 			}
 		} catch (SQLException e) {
@@ -136,7 +143,7 @@ public class User {
 			return "password length must be greater than 5!";
 		}
 		// jika role tidak dipilih oleh user
-		if(role.isEmpty()) {
+		else if(role.isEmpty()) {
 			return "role must be chosen";
 		}
 		

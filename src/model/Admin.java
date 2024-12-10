@@ -21,15 +21,16 @@ public class Admin extends User{
 		
 		try {
 			while (connect.rs.next()) {
-				Integer id = connect.rs.getInt("id");
-				String name = connect.rs.getString("name");
-				String date = connect.rs.getString("date");
-				String location = connect.rs.getString("location");
-				String description = connect.rs.getString("description");
-				eventList.add(new Event(id, name, date, location, description));
+				Integer id = connect.rs.getInt("event_id");
+				String name = connect.rs.getString("event_name");
+				String date = connect.rs.getString("event_date");
+				String location = connect.rs.getString("event_location");
+				String description = connect.rs.getString("event_description");
+				int organizer_id = connect.rs.getInt("organizer_id");
+				eventList.add(new Event(id, name, date, location, description, organizer_id));
 			}
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -79,8 +80,8 @@ public class Admin extends User{
 				String role = connect.rs.getString("role");
 				userList.add(new User(id, email, username, password, role));
 			}
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 	}

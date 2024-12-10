@@ -8,20 +8,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.User;
 
 public class RegisterView {
 	//component-component yang dibutuhkan
 	Scene scene;
 	
-	Button loginBtn, RegistBtn;
-	Label usernameLbl, emailLbl, passwordLbl, roleLbl, errorLbl;
-	TextField emailTxt, usernameTxt;
-	PasswordField passwordTxt;
-	ComboBox<String> role_cb;
-	VBox vbox;
+	private Button loginBtn, RegistBtn;
+	private Label usernameLbl, emailLbl, passwordLbl, roleLbl, errorLbl;
+	private TextField emailTxt, usernameTxt;
+	private PasswordField passwordTxt;
+	private ComboBox<String> role_cb;
+	private VBox vbox;
 	
-	String role[] = {"event organizer", "vendor", "guest"};
+	private String role[] = {"event organizer", "vendor", "guest"};
 	 
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {

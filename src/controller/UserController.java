@@ -13,8 +13,6 @@ public class UserController {
 			return "register success";
 		}
 		return message;
-		
-		
 	}
 	
 	//melakukan login
@@ -25,6 +23,14 @@ public class UserController {
 	// memanggil function checRegisterInput dari model yang akan memvalidasi input dari register
 	public static String checkRegisterInput(String email, String username, String password, String role){
 		return User.checkRegisterInput(email, username, password, role);
+	}
+	
+	public static User getUserByUsername(String name) {
+		return User.getUserByEmail(name);
+	}
+	
+	public static User getUserByEmail(String email) {
+		return User.getUserByEmail(email);
 	}
 
 }

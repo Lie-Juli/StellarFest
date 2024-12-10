@@ -13,8 +13,8 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// gw ubah ke EventView smentara - William
-		new EventView(primaryStage);
+		//memanggil view login setiap kali start
+		new LoginView(primaryStage);
 		primaryStage.show();
 	}
 

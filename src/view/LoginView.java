@@ -71,10 +71,21 @@ public class LoginView{
 				else {
 					User user = UserController.login(email, password);
 					if(user == null) {
-						errorLbl.setText("User Not Found");
+						errorLbl.setText("Your email or password is wrong");
 					}
 					else {
-						errorLbl.setText("User Found");
+						if(user.getRole().equals("admin")) { 
+							new EventView(stage);
+						}
+						else if(user.getRole().equals("event organizer")) {
+							new CreateEventView(stage, user);
+						}
+						else if(user.getRole().equals("Guest")) {
+							errorLbl.setText("User Found");
+						}
+						else if(user.getRole().equals("Seller")) {
+							errorLbl.setText("User Found");
+						}
 					}
 				}
 			}

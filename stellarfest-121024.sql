@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `events`
 --
-
-CREATE TABLE `events` (
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `date` varchar(100) DEFAULT NULL,
@@ -50,7 +50,8 @@ INSERT INTO `events` (`id`, `name`, `date`, `location`, `description`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
