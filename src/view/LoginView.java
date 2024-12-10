@@ -73,16 +73,20 @@ public class LoginView{
 					if(user == null) {
 						errorLbl.setText("Your email or password is wrong");
 					}
+					// jika user admin maka akan menuju page yang bisa diakses admin
 					else {
 						if(user.getRole().equals("admin")) { 
 							new EventView(stage);
 						}
+						// jika user event organizer akan menuju page yang bisa diakses event organizer
 						else if(user.getRole().equals("event organizer")) {
 							new CreateEventView(stage, user);
 						}
+						// jika user guest akan menuju page yang bisa diakses guest
 						else if(user.getRole().equals("Guest")) {
 							errorLbl.setText("User Found");
 						}
+						//// jika user seller akan menuju page yang bisa diakses seller
 						else if(user.getRole().equals("Seller")) {
 							errorLbl.setText("User Found");
 						}

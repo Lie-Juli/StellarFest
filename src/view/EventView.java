@@ -94,10 +94,10 @@ public class EventView implements EventHandler<ActionEvent>{
 		descriptionColumn.setMinWidth(vbox.getWidth()/5);
 		
 		TableColumn<Event, Integer> organizer_idColumn = new TableColumn<Event, Integer>("organizer id");
-		organizer_idColumn.setCellValueFactory(new PropertyValueFactory<Event, Integer>("organizer_id"));
+		organizer_idColumn.setCellValueFactory(new PropertyValueFactory<Event, Integer>("organizerID"));
 		organizer_idColumn.setMinWidth(vbox.getWidth()/5);
 		
-		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn, descriptionColumn);
+		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn, descriptionColumn, organizer_idColumn);
 		
 		
 	}

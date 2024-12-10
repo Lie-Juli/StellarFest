@@ -64,11 +64,13 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		scene = new Scene(vbox, 700, 500);
 	}
 	
+	// menambahkan component yang akan masuk ke dalam flowpane kita dimana flowpane ini akan bekerja sebagai navbar
 	private void addComponent() {
 		flowContainer.getChildren().add(viewOrganizedEventBtn);
 		flowContainer.getChildren().add(createEventPageBtn);
 	}
 	
+	// pembuatan stage yang akan menunjukan createEvent view
 	public CreateEventView(Stage stage, User user) {
 		this.stage = stage;
 		organizer = user;
@@ -79,8 +81,11 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		stage.show();
 	}
 
+	// hal yang dilakukan ketika menekan suatu button
 	@Override
 	public void handle(ActionEvent event) {
+		// jika menekan tombol create akan mendapatkan isi dari textfield name, location, textarea description, dan value dari datepicker yang akan dikonversi ke string dan menjalankan fungsi create event dari controller
+		// jika error akan menunjukkan messeage sesuai errornya, jika berhasil akan muncul messeage yang memberitahu bahwa data sudah berhasil ditambahkan
 		if(event.getSource() == createEventBtn) {
 			String name = nameTxt.getText();
 			LocalDate d = datePicker.getValue();

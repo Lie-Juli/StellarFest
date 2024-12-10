@@ -73,7 +73,7 @@ public class RegisterView {
 		});
 		
 		// jika menekan register button akan mendapatkan isi dari textfield email, username, passwordfield password dan combobox role dan menjalanakan fungsi register dari controller
-		// jika registrasi berhasil melewati validasi akan ke rediret ke loginview, jika tidak berhasil melewati semua validasi akan muncul error messagenya
+		// jika registrasi berhasil melewati validasi akan ke rediret ke loginview, jika tidak berhasil melewati semua validasi akan muncul error message sesuai errornya
 		RegistBtn.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override

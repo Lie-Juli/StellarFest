@@ -14,6 +14,7 @@ public class EventOrganizer extends User{
 		super(userID, email, username, password, role);
 	}
 
+	// getter setter
 	public List<String> getEventsCreated() {
 		return eventsCreated;
 	}
@@ -23,11 +24,13 @@ public class EventOrganizer extends User{
 	}
 
 	
+	// untuk memangil function createEvent dari model event melalui controllernya
 	public static int createEvent(String eventName, String date, String location, String description, int organizer_id) {
 		return EventController.createEvent(eventName, date, location, description, organizer_id);
 		
 	}
 	
+	// untuk memvalidasi input dari createEvent
 	public static String checkCreateEventInput(String eventName, String date, String location, String description) {
 		LocalDate now = LocalDate.now(); 
 		LocalDate datePicked = LocalDate.parse(date);
