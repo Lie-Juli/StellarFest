@@ -1,25 +1,32 @@
 package model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ArrayList;
 
 import controller.EventController;
+import util.Connect;
 
 public class EventOrganizer extends User{
-
+	private static Connect con = getCon();
+	
 	// untuk menyimpan event apa saja yang telah dibuat event organizer
-	public List<String> eventsCreated;
+	private static ArrayList<Event> eventsCreated;
+	private static ArrayList<User> guestList;
+	private static ArrayList<User> vendorList;
 	
 	public EventOrganizer(int userID, String email, String username, String password, String role) {
 		super(userID, email, username, password, role);
 	}
 
 	// getter setter
-	public List<String> getEventsCreated() {
+	public ArrayList<Event> getEventsCreated() {
 		return eventsCreated;
 	}
 
-	public void setEventsCreated(List<String> eventsCreated) {
+	public void setEventsCreated(ArrayList<Event> eventsCreated) {
 		this.eventsCreated = eventsCreated;
 	}
 
@@ -68,5 +75,73 @@ public class EventOrganizer extends User{
 		return "success";
 	}
 	
+	// fungsi untuk mengambil semua user yang memiliki role guest dari database
+	public static ArrayList<User> getGuest(){
+		guestList = new ArrayList<>();
+		String query = "SELECT * FROM users WHERE role = 'guest'";
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			while(rs.next()) {
+				Integer id = rs.getInt("id");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				guestList.add(new User(id, email, username, password, role));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return guestList;
+	}
+	
+	//  fungsi untuk mengambil semua user yang memiliki role vendor dari database
+	public static ArrayList<User> getVendor(){
+		vendorList = new ArrayList<>();
+		String query = "SELECT * FROM users WHERE role = 'vendor'";
+		ResultSet rs = con.execQuery(query);
+		
+		try {
+			while(rs.next()) {
+				Integer id = rs.getInt("id");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				vendorList.add(new User(id, email, username, password, role));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return vendorList;
+	}
+	
+	// fungsi untuk mengambil semua event yang memiliki userId yang sama dari database
+	public static ArrayList<Event> viewOrganizedEvents(int userId){
+		eventsCreated = new ArrayList<>();
+		String query = "SELECT * FROM events WHERE organizer_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt("event_id");
+				String name = rs.getString("event_name");
+				String date = rs.getString("event_date");
+				String location = rs.getString("event_location");
+				String description = rs.getString("event_description");
+				int organizer_id =rs.getInt("organizer_id");
+				eventsCreated.add(new Event(id, name, date, location, description, organizer_id));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return eventsCreated;
+	}
 
 }

@@ -1,6 +1,10 @@
 package controller;
 
+import java.util.ArrayList;
+
+import model.Event;
 import model.EventOrganizer;
+import model.User;
 
 public class EventOrganizerController {
 
@@ -18,6 +22,18 @@ public class EventOrganizerController {
 	// memanggil function checkCreateEventInput dari model yang akan memvalidasi input dari createEvent
 	public static String checkCreateEventInput(String eventName, String date, String location, String description) {
 		return EventOrganizer.checkCreateEventInput(eventName, date, location, description);
+	}
+	
+	public static ArrayList<User> getGuest(){
+		return EventOrganizer.getGuest();
+	}
+	
+	public static ArrayList<User> getVendor(){
+		return EventOrganizer.getVendor();
+	}
+	
+	public static ArrayList<Event> viewOrganizedEvents(int userId){
+		return EventOrganizer.viewOrganizedEvents(userId);
 	}
 
 }

@@ -98,8 +98,6 @@ public class EventView implements EventHandler<ActionEvent>{
 		organizer_idColumn.setMinWidth(vbox.getWidth()/5);
 		
 		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn, descriptionColumn, organizer_idColumn);
-		
-		
 	}
 	
 	public void viewAllEvent() {

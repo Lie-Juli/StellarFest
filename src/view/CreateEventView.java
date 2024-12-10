@@ -56,7 +56,9 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		datePicker.setValue(now);
 			
 		viewOrganizedEventBtn = new Button("Organized Events");
+		viewOrganizedEventBtn.setOnAction(this);
 		createEventPageBtn = new Button("Create Event");
+		createEventPageBtn.setOnAction(this);
 		createEventBtn = new Button("Create");
 		createEventBtn.setOnAction(this);
 			
@@ -94,6 +96,16 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 			String description = descriptionTxt.getText();
 			String message = EventOrganizerController.createEvent(name, date, location, description, organizer.getUserID());
 			errorLbl.setText(message);
+		}
+		
+		// jika menekan tombol createEvent akan menredirect ke createEvent view
+		else if(event.getSource() == createEventPageBtn) {
+			new CreateEventView(stage, organizer);
+		}
+		
+		// jika menekan tombol view Organized Event akan menredirect ke viewOrganizedEvents view
+		else if(event.getSource() == viewOrganizedEventBtn) {
+			new ViewOrganizedEventsView(stage, organizer);
 		}
 		
 	}

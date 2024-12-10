@@ -58,6 +58,14 @@ public class User {
 		this.role = role;
 	}
 	
+	public static Connect getCon() {
+		return con;
+	}
+
+	public static void setCon(Connect con) {
+		User.con = con;
+	}
+
 	//fungsi untuk melakukan register user baru yang kemudian akan dimasukan kedalam database
 	public static int register(String email, String username, String password, String role) {
 		String query = "INSERT INTO users(email, username, password, role) VALUES(?, ?, ?, ?)";
