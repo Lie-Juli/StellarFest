@@ -80,7 +80,7 @@ public class LoginView{
 						}
 						// jika user event organizer akan menuju page yang bisa diakses event organizer
 						else if(user.getRole().equals("event organizer")) {
-							new CreateEventView(stage, user);
+							new ViewOrganizedEventsView(stage, user);
 						}
 						// jika user guest akan menuju page yang bisa diakses guest
 						else if(user.getRole().equals("Guest")) {
