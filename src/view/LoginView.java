@@ -83,11 +83,11 @@ public class LoginView{
 							new ViewOrganizedEventsView(stage, user);
 						}
 						// jika user guest akan menuju page yang bisa diakses guest
-						else if(user.getRole().equals("Guest")) {
+						else if(user.getRole().equals("guest")) {
 							errorLbl.setText("User Found");
 						}
-						//// jika user seller akan menuju page yang bisa diakses seller
-						else if(user.getRole().equals("Seller")) {
+						//// jika user seller akan menuju page yang bisa diakses vendor
+						else if(user.getRole().equals("vendor")) {
 							errorLbl.setText("User Found");
 						}
 					}

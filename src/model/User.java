@@ -103,7 +103,7 @@ public class User {
 				String username = rs.getString("username");
 				String user_password = rs.getString("password");
 				String role = rs.getString("role");
-				//bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
+				// bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
 				// jika ditemukan event organizer akan dibuat event organizer yang baru, dan jika ditemukan vendor akan dibuat vendor baru
 				// ini digunakan untuk menentukan user apa yang sedang menggunakan sistem sehingga dapat menyesuaikan view dan fitur-fitur apa saja yang dapat digunakan user tersebut
 				if(role.equals("admin")) {

@@ -15,7 +15,7 @@ public class UserController {
 		return message;
 	}
 	
-	//melakukan login
+	//melakukan login jika melewati validasi
 	public static User login(String email, String password) {
 		if(loginValidation(email, password)) {
 			return User.login(email, password);
@@ -25,6 +25,7 @@ public class UserController {
 		}
 	}
 	
+	// memanggil function login validation yang akan memvalidasi input dari login
 	public static boolean loginValidation(String email, String password) {
 		return User.LoginValidation(email, password);
 	}
