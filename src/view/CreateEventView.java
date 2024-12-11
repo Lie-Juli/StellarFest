@@ -6,6 +6,7 @@ import controller.EventOrganizerController;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -21,6 +22,8 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 	private FlowPane flowContainer;
 	private VBox vbox;
 	private Button viewOrganizedEventBtn, createEventBtn, createEventPageBtn;
+	private Button logoutBtn;
+	
 	private Label nameLbl, dateLbl, locationLbl, descriptionLbl, errorLbl;
 	private TextField nameTxt, locationTxt;
 	private TextArea descriptionTxt;
@@ -61,15 +64,19 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		createEventPageBtn.setOnAction(this);
 		createEventBtn = new Button("Create");
 		createEventBtn.setOnAction(this);
+		logoutBtn = new Button("Logout");
+		logoutBtn.setOnAction(this);
 			
 		vbox = new VBox(10, flowContainer, nameLbl, nameTxt, dateLbl, datePicker, locationLbl, locationTxt, descriptionLbl, descriptionTxt, createEventBtn, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	
 	// menambahkan component yang akan masuk ke dalam flowpane kita dimana flowpane ini akan bekerja sebagai navbar
 	private void addComponent() {
-		flowContainer.getChildren().add(viewOrganizedEventBtn);
 		flowContainer.getChildren().add(createEventPageBtn);
+		flowContainer.getChildren().add(viewOrganizedEventBtn);
+		flowContainer.getChildren().add(logoutBtn);
 	}
 	
 	// pembuatan stage yang akan menunjukan createEvent view
@@ -108,5 +115,8 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 			new ViewOrganizedEventsView(stage, organizer);
 		}
 		
+		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
+			new LoginView(stage);
+		}
 	}
 }

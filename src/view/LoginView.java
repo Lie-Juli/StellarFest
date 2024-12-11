@@ -3,6 +3,7 @@ package view;
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -39,6 +40,7 @@ public class LoginView{
 		RegistBtn = new Button("Don't Have an Account, Register Here!");
 		
 		vbox = new VBox(10, emailLbl, emailTxt, passwordLbl, passwordTxt, loginBtn, RegistBtn, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	

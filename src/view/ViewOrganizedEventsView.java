@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,6 +26,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private Label editNameLbl, errorLbl;
 	private TextField editNameTxt;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addGuestBtn, addVendorBtn, editNameBtn, DetailsBtn;
+	private Button logoutBtn;
 	
 	private User organizer = null;
 	
@@ -50,8 +52,11 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		addVendorBtn = new Button("Add Vendor");
 		editNameBtn = new Button("Edit Event Name");
 		DetailsBtn = new Button("Details");
+		logoutBtn = new Button("Logout");
+		logoutBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, table, editNameLbl, editNameTxt, editNameBtn, flowContainerBot, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	
@@ -59,6 +64,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private void addComponent() {
 		flowContainer.getChildren().add(viewOrganizedEventBtn);
 		flowContainer.getChildren().add(createEventPageBtn);
+		flowContainer.getChildren().add(logoutBtn);
 		flowContainerBot.getChildren().add(addGuestBtn);
 		flowContainerBot.getChildren().add(addVendorBtn);
 		flowContainerBot.getChildren().add(DetailsBtn);
@@ -111,6 +117,9 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		// jika menekan tombol view Organized Event akan menredirect ke viewOrganizedEvents view
 		else if(event.getSource() == viewOrganizedEventBtn) {
 			new ViewOrganizedEventsView(stage, organizer);
+		}
+		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
+			new LoginView(stage);
 		}
 	}
 	

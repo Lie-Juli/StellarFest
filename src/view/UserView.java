@@ -39,6 +39,7 @@ public class UserView implements EventHandler<ActionEvent>{
 	private Button deleteBtn;
 	private Button viewEventBtn;
 	private Button viewUserBtn;
+	private Button logoutBtn;
 	
 	private Connect connect = Connect.getInstance();
 	private AdminController adminController = new AdminController();
@@ -61,6 +62,8 @@ public class UserView implements EventHandler<ActionEvent>{
 		viewEventBtn.setOnAction(this);
 		viewUserBtn = new Button("View Users");
 		viewUserBtn.setOnAction(this);
+		logoutBtn = new Button("Logout");
+		logoutBtn.setOnAction(this);
 		
 		table = new TableView<User>();
 		
@@ -73,7 +76,7 @@ public class UserView implements EventHandler<ActionEvent>{
 	private void addComponent() {
 		flowContainer.getChildren().add(viewUserBtn);
 		flowContainer.getChildren().add(viewEventBtn);
-		
+		flowContainer.getChildren().add(logoutBtn);
 	}
 	
 	// Set up table, column, size, dll
@@ -147,6 +150,8 @@ public class UserView implements EventHandler<ActionEvent>{
 			new EventView(stage);
 		}else if (event.getSource() == viewUserBtn) { // Jika button yang di click adalah view user button, redirect ke page ini lagi
 			new UserView(stage);
+		}else if(event.getSource() == logoutBtn) { // Logout jika ditekan
+			new LoginView(stage);
 		}
 		
 	}
