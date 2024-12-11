@@ -21,41 +21,59 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private Scene scene;
 	
 	private FlowPane flowContainer, flowContainerBot;
+	private FlowPane flowContainerId;
+	private FlowPane flowContainerName;
 	private VBox vbox;
 	private TableView<Event> table;
 	private Label editNameLbl, errorLbl;
-	private TextField editNameTxt;
+	private Label editEventIdLbl, editEventNameLbl;
+	private TextField editEventIdTf, editEventNameTf;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addGuestBtn, addVendorBtn, editNameBtn, DetailsBtn;
 	private Button logoutBtn;
 	
 	private User organizer = null;
+	private EventOrganizerController eventOrganizerController = new EventOrganizerController(); 
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		flowContainer = new FlowPane();
 		flowContainerBot = new FlowPane();
+		flowContainerId = new FlowPane();
+		flowContainerName = new FlowPane();
 		
 		editNameLbl = new Label();
 		editNameLbl.setText("Edit Name");
+		editEventIdLbl = new Label("Event's id to edit   :   ");
+		editEventNameLbl = new Label("Event's new name :   ");
 		
 		errorLbl = new Label();
 		
-		editNameTxt = new TextField();
+		editEventIdTf = new TextField();
+		editEventNameTf = new TextField();
 		 
 		table = new TableView<Event>();
 		
 		viewOrganizedEventBtn = new Button("Organized Events");
 		viewOrganizedEventBtn.setOnAction(this);
+		
 		createEventPageBtn = new Button("Create Event");
 		createEventPageBtn.setOnAction(this);
-		addGuestBtn = new Button("Add Guest");
-		addVendorBtn = new Button("Add Vendor");
-		editNameBtn = new Button("Edit Event Name");
-		DetailsBtn = new Button("Details");
+		
 		logoutBtn = new Button("Logout");
 		logoutBtn.setOnAction(this);
 		
-		vbox = new VBox(10, flowContainer, table, editNameLbl, editNameTxt, editNameBtn, flowContainerBot, errorLbl);
+		editNameBtn = new Button("Edit Event Name");
+		editNameBtn.setOnAction(this);
+		
+		addGuestBtn = new Button("Add Guest");
+		addGuestBtn.setOnAction(this);
+		addVendorBtn = new Button("Add Vendor");
+		addVendorBtn.setOnAction(this);
+		DetailsBtn = new Button("Details");
+		DetailsBtn.setOnAction(this);
+		
+		
+		vbox = new VBox(10, flowContainer, table, editNameLbl, flowContainerId, flowContainerName, editNameBtn, errorLbl, flowContainerBot);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -68,6 +86,12 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		flowContainerBot.getChildren().add(addGuestBtn);
 		flowContainerBot.getChildren().add(addVendorBtn);
 		flowContainerBot.getChildren().add(DetailsBtn);
+		
+		flowContainerId.getChildren().add(editEventIdLbl);
+		flowContainerName.getChildren().add(editEventNameLbl);
+		
+		flowContainerId.getChildren().add(editEventIdTf);
+		flowContainerName.getChildren().add(editEventNameTf);
 	}
 	
 	// untuk membuat layout table dan mengisi table dengan data
@@ -90,6 +114,10 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		
 		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
 		
+		
+	}
+	
+	public void refreshTable() {
 		ObservableList<Event> events = FXCollections.observableArrayList(EventOrganizerController.viewOrganizedEvents(organizer.getUserID()));
 		table.setItems(events);
 	}
@@ -102,6 +130,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		init();
 		addComponent();
 		setTable();
+		refreshTable();
 		stage.setTitle("Create Event");
 		stage.setScene(scene);
 		stage.show();
@@ -120,6 +149,19 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
+		}
+		
+		else if (event.getSource() == editNameBtn) {
+			String eventId = editEventIdTf.getText();
+			String newEventName = editEventNameTf.getText();
+			boolean valid = eventOrganizerController.editEventName(eventId, Integer.toString(organizer.getUserID()), newEventName);
+			
+			if (valid) {
+				errorLbl.setText("Name Changed.");
+				refreshTable();
+			}else {
+				errorLbl.setText("ERROR. Make sure to input a valid id and name.");
+			}
 		}
 	}
 	

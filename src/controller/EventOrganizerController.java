@@ -36,4 +36,8 @@ public class EventOrganizerController {
 		return EventOrganizer.viewOrganizedEvents(userId);
 	}
 
+	// Method untuk edit event name
+	public boolean editEventName (String eventId, String organizerId, String newEventName) {	
+		return EventOrganizer.editEventName(eventId, organizerId, newEventName);
+	}
 }

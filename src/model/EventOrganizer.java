@@ -144,4 +144,38 @@ public class EventOrganizer extends User{
 		return eventsCreated;
 	}
 
+	// Method untuk edit event name
+	public static boolean editEventName (String eventId, String organizerId, String newEventName) {
+		boolean inputIsInteger = isInteger(eventId);
+		boolean nameIsEmpty = newEventName.isEmpty();
+		if (!inputIsInteger || nameIsEmpty) { // Validasi input 
+			return false;
+		}
+		//Select query from DB
+		String querySearch = "SELECT * FROM events WHERE event_id = ? AND organizer_id = ?";
+		PreparedStatement ps = con.prepareStatement(querySearch);
+		
+		try {
+			ps.setString(1, eventId);
+			ps.setString(2, organizerId);
+			ResultSet rs = ps.executeQuery();
+			if(!rs.next()) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		String query = String.format("UPDATE events SET event_name = '%s' WHERE event_id = %s", newEventName, eventId);
+		con.execUpdate(query);
+		return true;
+	}
+	
+	private static boolean isInteger(String id) {
+		try {
+			Integer.parseInt(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }
