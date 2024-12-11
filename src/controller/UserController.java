@@ -17,7 +17,16 @@ public class UserController {
 	
 	//melakukan login
 	public static User login(String email, String password) {
-		return User.login(email, password);
+		if(loginValidation(email, password)) {
+			return User.login(email, password);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public static boolean loginValidation(String email, String password) {
+		return User.LoginValidation(email, password);
 	}
 	
 	// memanggil function checRegisterInput dari model yang akan memvalidasi input dari register
@@ -25,10 +34,11 @@ public class UserController {
 		return User.checkRegisterInput(email, username, password, role);
 	}
 	
+	// memanggil function getUserByUsername dari model yang akan mendapatkan suatu user bedasarakan usernamenya
 	public static User getUserByUsername(String name) {
 		return User.getUserByEmail(name);
 	}
-	
+	// memanggil function getUserByEmail dari model yang akan mendapatkan suatu user bedasarakan emailnya
 	public static User getUserByEmail(String email) {
 		return User.getUserByEmail(email);
 	}

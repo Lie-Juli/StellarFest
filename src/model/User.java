@@ -103,26 +103,20 @@ public class User {
 				String username = rs.getString("username");
 				String user_password = rs.getString("password");
 				String role = rs.getString("role");
-				// pengecekan untuk memastikan bahwa email dan password harus sama persis
-				if(user_email.equals(email) && user_password.equals(password)) {
-					//bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
-					// jika ditemukan event organizer akan dibuat event organizer yang baru, dan jika ditemukan vendor akan dibuat vendor baru
-					// ini digunakan untuk menentukan user apa yang sedang menggunakan sistem sehingga dapat menyesuaikan view dan fitur-fitur apa saja yang dapat digunakan user tersebut
-					if(role.equals("admin")) {
-						user = new Admin(id, user_email, username, user_password, role);
-					}
-					else if(role.equals("guest")) {
-						user = new Guest(id, user_email, username, user_password, role);
-					}
-					else if(role.equals("event organizer")) {
-						user = new EventOrganizer(id, user_email, username, user_password, role);
-					}
-					else if(role.equals("vendor")) {
-						user = new Vendor(id, user_email, username, user_password, role);
-					}
+				//bila user yang ditemukan adalah admin maka akan dibuat admin baru, jika yang ditemukan guest akan dibuat guest baru, 
+				// jika ditemukan event organizer akan dibuat event organizer yang baru, dan jika ditemukan vendor akan dibuat vendor baru
+				// ini digunakan untuk menentukan user apa yang sedang menggunakan sistem sehingga dapat menyesuaikan view dan fitur-fitur apa saja yang dapat digunakan user tersebut
+				if(role.equals("admin")) {
+					user = new Admin(id, user_email, username, user_password, role);
 				}
-				else {
-					user = null;
+				else if(role.equals("guest")) {
+					user = new Guest(id, user_email, username, user_password, role);
+				}
+				else if(role.equals("event organizer")) {
+					user = new EventOrganizer(id, user_email, username, user_password, role);
+				}
+				else if(role.equals("vendor")) {
+					user = new Vendor(id, user_email, username, user_password, role);
 				}
 			}
 		} catch (SQLException e) {
@@ -130,6 +124,31 @@ public class User {
 		}
 		
 		return user;
+	}
+	
+	// untuk memvalidasi login bahwa email dan password sama
+	public static boolean LoginValidation(String email, String password) {
+		String query = "SELECT * FROM users WHERE email = ? and password = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setString(1, email);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				String user_email = rs.getString("email");
+				String user_password = rs.getString("password");
+				// pengecekan untuk memastikan bahwa email dan password harus sama persis
+				if(user_email.equals(email) && user_password.equals(password)) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+		
 	}
 	
 	//untuk validasi input dari register
@@ -223,5 +242,7 @@ public class User {
 		
 		return user;
 	}
+	
+	
 	
 }
