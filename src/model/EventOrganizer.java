@@ -159,7 +159,9 @@ public class EventOrganizer extends User{
 			ps.setString(1, eventId);
 			ps.setString(2, organizerId);
 			ResultSet rs = ps.executeQuery();
-			if(!rs.next()) {
+			
+			boolean resultNotEmpty = rs.next();
+			if(!resultNotEmpty) {
 				return false;
 			}
 		} catch (SQLException e) {

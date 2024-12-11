@@ -151,9 +151,11 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 			new LoginView(stage);
 		}
 		
-		else if (event.getSource() == editNameBtn) {
+		else if (event.getSource() == editNameBtn) { // Melakukan validasi dan query ketika edit name button ditekan
 			String eventId = editEventIdTf.getText();
 			String newEventName = editEventNameTf.getText();
+			
+			// Check apakah berhasil diedit/ input valid. (panggil method di event organizer controller)
 			boolean valid = eventOrganizerController.editEventName(eventId, Integer.toString(organizer.getUserID()), newEventName);
 			
 			if (valid) {
@@ -162,6 +164,8 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 			}else {
 				errorLbl.setText("ERROR. Make sure to input a valid id and name.");
 			}
+			
+			refreshTable();
 		}
 	}
 	
