@@ -24,6 +24,7 @@ import util.Connect;
 
 public class EventView implements EventHandler<ActionEvent>{
 	
+	// Component declaration yang digunakan
 	private Stage stage;
 	private Scene scene;
 	
@@ -43,6 +44,7 @@ public class EventView implements EventHandler<ActionEvent>{
 	
 	private ArrayList<Event> eventList;
 	
+	// Inisialisasi component
 	public void init() {
 		eventList = new ArrayList<Event>();
 		
@@ -67,11 +69,13 @@ public class EventView implements EventHandler<ActionEvent>{
 		scene = new Scene(vbox, 700, 500);
 	}
 	
+	// Tambah button ke navbar
 	private void addComponent() {
 		flowContainer.getChildren().add(viewEventBtn);
 		flowContainer.getChildren().add(viewUserBtn);
 	}
 	
+	// Set up table, column, size, dll
 	private void setTable() {
 		TableColumn<Event, Integer> idColumn = new TableColumn<Event, Integer>("Id");
 		idColumn.setCellValueFactory(new PropertyValueFactory<Event, Integer>("id"));
@@ -100,11 +104,13 @@ public class EventView implements EventHandler<ActionEvent>{
 		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn, descriptionColumn, organizer_idColumn);
 	}
 	
+	// Method untuk view semua events & refresh table, manggil admin method & tambahkan events ke table
 	public void viewAllEvent() {
 		ObservableList<Event> events = adminController.viewAllEvent(eventList, connect);
 		table.setItems(events);
 	}
 	
+	// Constructor untuk inisialisasi event view page
 	public EventView(Stage stage) {
 		this.stage = stage;
 		init();
@@ -116,27 +122,35 @@ public class EventView implements EventHandler<ActionEvent>{
 		stage.show();
 	}
 
+	
+	// Handling events, button-button click listener
 	@Override
 	public void handle(ActionEvent event) {
-		if (event.getSource() == deleteBtn) {
-			if (idInput.getText().equals("")) {
+		
+		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
+			
+			if (idInput.getText().equals("")) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
 				errorLabel.setText("Input vield can't be empty!");
-			}else {
+				
+			}else { // Jika input field tidak kosong, validasi input & refresh table view.
 				String id = idInput.getText();
+				
+				// Check apakah berhasil dihapus/ input valid. (panggil method di admin controller)
 				Boolean valid = adminController.deleteEvent(id, connect);
 
-				if (valid) {
+				if (valid) { // jika valid confirmasi lewat error label
 					errorLabel.setText("Data deleted!");
-				}else {
+				}else { // jika tidak valid munculkan error label yang sesuai
 					errorLabel.setText("Enter a valid id!");
 				}
+				//refresh table
 				viewAllEvent();
 				
 			}
 		}
-		else if (event.getSource() == viewEventBtn) {
+		else if (event.getSource() == viewEventBtn) { // Jika button yang di click adalah view event button, redirect ke page ini lagi
 			new EventView(stage);
-		}else if (event.getSource() == viewUserBtn) {
+		}else if (event.getSource() == viewUserBtn) { // Jika button yang di click adalah view user button, redirect ke page user view page
 			new UserView(stage);
 		}
 		

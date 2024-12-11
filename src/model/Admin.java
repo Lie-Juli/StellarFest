@@ -13,6 +13,7 @@ public class Admin extends User{
 		super(userID, email, username, password, role);
 	}
 
+	// Method untuk mengambil semua event dari database, dan simpan ke eventList
 	public static void getAllEvent(ArrayList<Event> eventList, Connect connect) {
 		eventList.clear();
 		//Select query from DB
@@ -34,11 +35,12 @@ public class Admin extends User{
 		}
 	}
 	
+	// Method untuk menghapus event dari database
 	public static boolean deleteEvent(String id, Connect connect) {
-		if (!isInteger(id)) {
+		if (!isInteger(id)) { // Validasi input 
 			return false;
 		}
-		
+		//Select query from DB
 		String querySearch = "SELECT * FROM events WHERE id = ? ";
 		PreparedStatement ps = connect.prepareStatement(querySearch);
 		
@@ -56,6 +58,7 @@ public class Admin extends User{
 		return true;
 	}
 	
+	// Method untuk validasi input 
 	private static boolean isInteger(String id) {
 		try {
 			Integer.parseInt(id);
@@ -65,6 +68,7 @@ public class Admin extends User{
 		}
 	}
 	
+	// Method untuk mengambil semua user dari database, dan simpan ke eventList
 	public static void getAllUser(ArrayList<User> userList, Connect connect) {
 		userList.clear();
 		//Select query from DB
@@ -86,11 +90,12 @@ public class Admin extends User{
 		
 	}
 	
+	// Method untuk menghapus user dari database
 	public static boolean deleteUser(String id, Connect connect) {
-		if (!isInteger(id)) {
+		if (!isInteger(id)) { // Validasi input 
 			return false;
 		}
-		
+		//Select query from DB
 		String querySearch = "SELECT * FROM users WHERE id = ? ";
 		PreparedStatement ps = connect.prepareStatement(querySearch);
 		
