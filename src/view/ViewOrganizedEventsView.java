@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,13 +27,14 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private VBox vbox;
 	private TableView<Event> table;
 	private Label editNameLbl, errorLbl;
-	private Label editEventIdLbl, editEventNameLbl;
-	private TextField editEventIdTf, editEventNameTf;
+	private Label editEventNameLbl;
+	private TextField editEventNameTf;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addGuestBtn, addVendorBtn, editNameBtn, DetailsBtn;
 	private Button logoutBtn;
 	
 	private User organizer = null;
-	private EventOrganizerController eventOrganizerController = new EventOrganizerController(); 
+	private EventOrganizerController eventOrganizerController = new EventOrganizerController();
+	int tempId;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
@@ -43,15 +45,14 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		
 		editNameLbl = new Label();
 		editNameLbl.setText("Edit Name");
-		editEventIdLbl = new Label("Event's id to edit   :   ");
 		editEventNameLbl = new Label("Event's new name :   ");
 		
 		errorLbl = new Label();
 		
-		editEventIdTf = new TextField();
 		editEventNameTf = new TextField();
 		 
 		table = new TableView<Event>();
+		table.setOnMouseClicked(tableMouseEvent());
 		
 		viewOrganizedEventBtn = new Button("Organized Events");
 		viewOrganizedEventBtn.setOnAction(this);
@@ -73,7 +74,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		DetailsBtn.setOnAction(this);
 		
 		
-		vbox = new VBox(10, flowContainer, table, editNameLbl, flowContainerId, flowContainerName, editNameBtn, errorLbl, flowContainerBot);
+		vbox = new VBox(10, flowContainer, table, editNameLbl, flowContainerName, editNameBtn, errorLbl, flowContainerBot);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -87,10 +88,8 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		flowContainerBot.getChildren().add(addVendorBtn);
 		flowContainerBot.getChildren().add(DetailsBtn);
 		
-		flowContainerId.getChildren().add(editEventIdLbl);
 		flowContainerName.getChildren().add(editEventNameLbl);
 		
-		flowContainerId.getChildren().add(editEventIdTf);
 		flowContainerName.getChildren().add(editEventNameTf);
 	}
 	
@@ -135,6 +134,22 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	private EventHandler<MouseEvent> tableMouseEvent(){
+		
+		return new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				TableSelectionModel<Event> tsm = table.getSelectionModel();
+				tsm.setSelectionMode(SelectionMode.SINGLE);
+				Event eventSelected = tsm.getSelectedItem();
+				editEventNameTf.setText(eventSelected.getName());
+				tempId = eventSelected.getId();
+			}
+		};
+}
 
 	// hal yang dilakukan ketika menekan suatu button
 	@Override
@@ -152,17 +167,16 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		}
 		
 		else if (event.getSource() == editNameBtn) { // Melakukan validasi dan query ketika edit name button ditekan
-			String eventId = editEventIdTf.getText();
 			String newEventName = editEventNameTf.getText();
 			
 			// Check apakah berhasil diedit/ input valid. (panggil method di event organizer controller)
-			boolean valid = eventOrganizerController.editEventName(eventId, Integer.toString(organizer.getUserID()), newEventName);
+			boolean valid = eventOrganizerController.editEventName(tempId, newEventName);
 			
 			if (valid) {
 				errorLbl.setText("Name Changed.");
 				refreshTable();
 			}else {
-				errorLbl.setText("ERROR. Make sure to input a valid id and name.");
+				errorLbl.setText("ERROR. Please input a New Event Name");
 			}
 			
 			refreshTable();

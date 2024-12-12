@@ -145,39 +145,35 @@ public class EventOrganizer extends User{
 	}
 
 	// Method untuk edit event name
-	public static boolean editEventName (String eventId, String organizerId, String newEventName) {
-		boolean inputIsInteger = isInteger(eventId);
+	public static boolean editEventName (int eventId, String newEventName) {
 		boolean nameIsEmpty = newEventName.isEmpty();
-		if (!inputIsInteger || nameIsEmpty) { // Validasi input 
+		if (nameIsEmpty) { // Validasi input 
 			return false;
 		}
 		//Select query from DB
-		String querySearch = "SELECT * FROM events WHERE event_id = ? AND organizer_id = ?";
+		String querySearch = "SELECT * FROM events WHERE event_id = ?";
 		PreparedStatement ps = con.prepareStatement(querySearch);
 		
 		try {
-			ps.setString(1, eventId);
-			ps.setString(2, organizerId);
+			ps.setInt(1, eventId);
 			ResultSet rs = ps.executeQuery();
 			
 			boolean resultNotEmpty = rs.next();
+			// jika event tidak ditemukan
 			if(!resultNotEmpty) {
+				return false;
+			}
+			// jika nama event lama sama dengan nama event baru
+			if(rs.getString("event_name").equals(newEventName)) {
 				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		// sudah melewati semua validasi akan diupdate
 		String query = String.format("UPDATE events SET event_name = '%s' WHERE event_id = %s", newEventName, eventId);
 		con.execUpdate(query);
 		return true;
-	}
-	
-	private static boolean isInteger(String id) {
-		try {
-			Integer.parseInt(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
 	}
 }
