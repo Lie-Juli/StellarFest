@@ -136,6 +136,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		stage.show();
 	}
 	
+	// untuk mendapatkan data suatu event dari table hanya dengan click menggunakan mouse
 	private EventHandler<MouseEvent> tableMouseEvent(){
 		
 		return new EventHandler<MouseEvent>() {
