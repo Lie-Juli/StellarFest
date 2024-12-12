@@ -116,6 +116,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		
 	}
 	
+	// untuk menrefresh data di table agar sesuai dengan yang terbaru
 	public void refreshTable() {
 		ObservableList<Event> events = FXCollections.observableArrayList(EventOrganizerController.viewOrganizedEvents(organizer.getUserID()));
 		table.setItems(events);
