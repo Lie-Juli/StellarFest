@@ -78,7 +78,7 @@ public class LoginView{
 					// jika user admin maka akan menuju page yang bisa diakses admin
 					else {
 						if(user.getRole().equals("admin")) { 
-							new EventView(stage);
+							new EventView(stage, user);
 						}
 						// jika user event organizer akan menuju page yang bisa diakses event organizer
 						else if(user.getRole().equals("event organizer")) {

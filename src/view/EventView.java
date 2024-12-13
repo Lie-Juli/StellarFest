@@ -20,6 +20,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Event;
+import model.User;
 import util.Connect;
 
 public class EventView implements EventHandler<ActionEvent>{
@@ -38,10 +39,12 @@ public class EventView implements EventHandler<ActionEvent>{
 	private Button deleteBtn;
 	private Button viewEventBtn;
 	private Button viewUserBtn;
-	private Button logoutBtn;
+	private Button logoutBtn, changeProfileBtn;
 	
 	private Connect connect = Connect.getInstance();
 	private AdminController adminController = new AdminController();
+	
+	private User user;
 	
 	private ArrayList<Event> eventList;
 	
@@ -64,6 +67,8 @@ public class EventView implements EventHandler<ActionEvent>{
 		viewUserBtn.setOnAction(this);
 		logoutBtn = new Button("Logout");
 		logoutBtn.setOnAction(this);
+		changeProfileBtn = new Button("Change Profile");
+		changeProfileBtn.setOnAction(this);
 		
 		table = new TableView<Event>();
 		
@@ -76,6 +81,7 @@ public class EventView implements EventHandler<ActionEvent>{
 	private void addComponent() {
 		flowContainer.getChildren().add(viewEventBtn);
 		flowContainer.getChildren().add(viewUserBtn);
+		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
 	}
 	
@@ -115,8 +121,9 @@ public class EventView implements EventHandler<ActionEvent>{
 	}
 	
 	// Constructor untuk inisialisasi event view page
-	public EventView(Stage stage) {
+	public EventView(Stage stage, User user) {
 		this.stage = stage;
+		this.user = user;
 		init();
 		addComponent();
 		setTable();
@@ -153,12 +160,18 @@ public class EventView implements EventHandler<ActionEvent>{
 			}
 		}
 		else if (event.getSource() == viewEventBtn) { // Jika button yang di click adalah view event button, redirect ke page ini lagi
-			new EventView(stage);
+			new EventView(stage, user);
 		}else if (event.getSource() == viewUserBtn) { // Jika button yang di click adalah view user button, redirect ke page user view page
-			new UserView(stage);
-		}else if(event.getSource() == logoutBtn) { // Logout jika ditekan
+			new UserView(stage, user);
+		}
+		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
+		else if(event.getSource() == changeProfileBtn) {
+			new ChangeProfileView(stage, user);
+		}
+		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
 		}
+		
 		
 	}
 	

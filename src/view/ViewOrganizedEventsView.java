@@ -30,7 +30,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private Label editEventNameLbl;
 	private TextField editEventNameTf;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addGuestBtn, addVendorBtn, editNameBtn, DetailsBtn;
-	private Button logoutBtn;
+	private Button logoutBtn, changeProfileBtn;
 	
 	private User organizer = null;
 	private EventOrganizerController eventOrganizerController = new EventOrganizerController();
@@ -73,6 +73,9 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		DetailsBtn = new Button("Details");
 		DetailsBtn.setOnAction(this);
 		
+		changeProfileBtn = new Button("Change Profile");
+		changeProfileBtn.setOnAction(this);
+		
 		
 		vbox = new VBox(10, flowContainer, table, editNameLbl, flowContainerName, editNameBtn, errorLbl, flowContainerBot);
 		vbox.setPadding(new Insets(10));
@@ -83,6 +86,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private void addComponent() {
 		flowContainer.getChildren().add(viewOrganizedEventBtn);
 		flowContainer.getChildren().add(createEventPageBtn);
+		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
 		flowContainerBot.getChildren().add(addGuestBtn);
 		flowContainerBot.getChildren().add(addVendorBtn);
@@ -131,7 +135,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		addComponent();
 		setTable();
 		refreshTable();
-		stage.setTitle("Create Event");
+		stage.setTitle("Organized Events");
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -163,6 +167,10 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		// jika menekan tombol view Organized Event akan menredirect ke viewOrganizedEvents view
 		else if(event.getSource() == viewOrganizedEventBtn) {
 			new ViewOrganizedEventsView(stage, organizer);
+		}
+		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
+		else if(event.getSource() == changeProfileBtn) {
+			new ChangeProfileView(stage, organizer);
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);

@@ -43,5 +43,21 @@ public class UserController {
 	public static User getUserByEmail(String email) {
 		return User.getUserByEmail(email);
 	}
+	// memanggil function checkChangeProfileInput dari model yang akan memvalidasi input dari change profile
+	public static String checkChangeProfileInput(User user, String email, String username, String oldPassword, String newPassword) {
+		return User.checkChangeProfileInput(user, email, username, oldPassword, newPassword);
+	}
+	
+	// untuk melakukan change profile jika berhasil melewati validasi
+	public static String changeProfile(User user, String email, String username, String oldPassword, String newPassword) {
+		String message = checkChangeProfileInput(user, email, username, oldPassword, newPassword);
+		
+		if(message.equals("success")) {
+			User.changeProfile(user, email, username, oldPassword, newPassword);
+			return "change profile success";
+		}
+		
+		return message;
+	}
 
 }

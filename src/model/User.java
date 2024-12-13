@@ -174,17 +174,29 @@ public class User {
 			return "role must be chosen";
 		}
 		
-		
-		// ini logic untuk menemukan apakah user dengan email atau username tersebut sudah ada
-		String query = "SELECT * FROM users WHERE email = ? or username = ?";
+		// ini logic untuk menemukan apakah user dengan email tersebut sudah ada
+		String query = "SELECT * FROM users WHERE email = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		
 		try {
 			ps.setString(1, email);
-			ps.setString(2, username);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				return "email already taken or username already taken";
+				return "email already taken";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// ini logic untuk menemukan apakah user dengan username tersebut sudah ada
+		query = "SELECT * FROM users WHERE username = ?";
+		ps = con.prepareStatement(query);
+		
+		try {
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return "username already taken";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -243,6 +255,137 @@ public class User {
 		return user;
 	}
 	
+	// fungsi untuk mengubah profile
+	public static int changeProfile(User user, String email, String username, String oldPassword, String newPassword) {
+		String query;
+		
+		int success = 0;
+		
+		// bila email diisi, akan mengupdate emailnya
+		if(!email.isEmpty()) {
+			query = "UPDATE users SET email = ? WHERE id = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			try {
+				ps.setString(1, email);
+				ps.setInt(2, user.getUserID());
+				user.setEmail(email);
+				success = ps.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace(); 
+			}
+		}
+		
+		// bila username diisi, akan mengupdate usernamenya
+		if(!username.isEmpty()) {
+			query = "UPDATE users SET username = ? WHERE id = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			try {
+				ps.setString(1, username);
+				ps.setInt(2, user.getUserID());
+				user.setUsername(username);
+				success = ps.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace(); 
+			}
+		}
+		// jika new password dan old password diisi, akan mengupdate passwordnya
+		if(!newPassword.isEmpty() && !oldPassword.isEmpty()) {
+			query = "UPDATE users SET password = ? WHERE id = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			try {
+				ps.setString(1, newPassword);
+				ps.setInt(2, user.getUserID());
+				user.setPassword(newPassword);
+				success = ps.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace(); 
+			}
+		}
+		
+		return success;
+	}
 	
+	
+	// untuk validasi input dari change profile
+	public static String checkChangeProfileInput(User user, String email, String username, String oldPassword, String newPassword) {
+		// bila email yang baru sama dengan email yang lama
+		if(email.equals(user.getEmail())) {
+			return "new email cannot be the same as old email";
+		}
+		
+		// bila username yang baru sama dengan username yang lama
+		if(username.equals(user.getUsername())) {
+			return "new username cannot be the same as old username";
+		}
+		
+		// bila email tidak kosong, kita akan mengecek apabila email yang dimasuki sudah digunakan atau belum
+		if(!email.isEmpty()) {
+			String query = "SELECT * FROM users WHERE email = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			try {
+				ps.setString(1, email);
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()) {
+					return "email already taken";
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// bila username tidak kosong, kita akan mengecek apabila username yang dimasuki sudah digunakan atau belum
+		if(!username.isEmpty()) {
+			String query = "SELECT * FROM users WHERE username = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			try {
+				ps.setString(1, username);
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()) {
+					return "username already taken";
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// jika old password tidak kosong
+		if(!oldPassword.isEmpty()) {
+			// check apakah old password yang dimasukan benar
+			if(!user.getPassword().equals(oldPassword)) {
+				return "old password is wrong";
+			}
+			// jika old password benar, check apakah, new password diisi
+			if(newPassword.isEmpty()) {
+				return "to update your password, you must also input the new password";
+			}
+			// jika new password diisi, check apakah password baru sama dengan password lama
+			else {
+				if(oldPassword.equals(newPassword)) {
+					return "new password cannot be the same as old password";
+				}
+			}
+		}
+		
+		// jika new password tidak kosong
+		if(!newPassword.isEmpty()) {
+			// check apakah old password diisi
+			if(oldPassword.isEmpty()) {
+				return "to update your password, you must also input the old password";
+			}
+		}
+		
+		// jika semua field kosong
+		if(email.isEmpty() && username.isEmpty() && oldPassword.isEmpty() && newPassword.isEmpty()) {
+			return "There is nothing to update";
+		}
+		
+		// jika sudah melewati semua validasi
+		return "success";
+	}
 	
 }

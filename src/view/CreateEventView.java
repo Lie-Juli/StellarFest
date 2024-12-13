@@ -22,7 +22,7 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 	private FlowPane flowContainer;
 	private VBox vbox;
 	private Button viewOrganizedEventBtn, createEventBtn, createEventPageBtn;
-	private Button logoutBtn;
+	private Button logoutBtn, changeProfileBtn;
 	
 	private Label nameLbl, dateLbl, locationLbl, descriptionLbl, errorLbl;
 	private TextField nameTxt, locationTxt;
@@ -66,6 +66,8 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		createEventBtn.setOnAction(this);
 		logoutBtn = new Button("Logout");
 		logoutBtn.setOnAction(this);
+		changeProfileBtn = new Button("Change Profile");
+		changeProfileBtn.setOnAction(this);
 			
 		vbox = new VBox(10, flowContainer, nameLbl, nameTxt, dateLbl, datePicker, locationLbl, locationTxt, descriptionLbl, descriptionTxt, createEventBtn, errorLbl);
 		vbox.setPadding(new Insets(10));
@@ -76,6 +78,7 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 	private void addComponent() {
 		flowContainer.getChildren().add(createEventPageBtn);
 		flowContainer.getChildren().add(viewOrganizedEventBtn);
+		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
 	}
 	
@@ -113,6 +116,10 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 		// jika menekan tombol view Organized Event akan menredirect ke viewOrganizedEvents view
 		else if(event.getSource() == viewOrganizedEventBtn) {
 			new ViewOrganizedEventsView(stage, organizer);
+		}
+		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
+		else if(event.getSource() == changeProfileBtn) {
+			new ChangeProfileView(stage, organizer);
 		}
 		
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
