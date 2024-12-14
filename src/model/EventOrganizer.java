@@ -75,8 +75,8 @@ public class EventOrganizer extends User{
 		return "success";
 	}
 	
-	// fungsi untuk mengambil semua user yang memiliki role guest dari database
-	public static ArrayList<User> getGuest(){
+	// fungsi untuk mengambil semua user yang memiliki role guest yang belum diinvite pada suatu event dari database
+	public static ArrayList<User> getGuest(int event_id){
 		guestList = new ArrayList<>();
 		String query = "SELECT * FROM users WHERE role = 'guest'";
 		ResultSet rs = con.execQuery(query);
@@ -88,7 +88,18 @@ public class EventOrganizer extends User{
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
-				guestList.add(new User(id, email, username, password, role));
+				String query2 = "SELECT * FROM invitations WHERE user_id = ? and event_id = ?";
+				PreparedStatement ps = con.prepareStatement(query2);
+				try {
+					ps.setInt(1, id);
+					ps.setInt(2, event_id);
+					ResultSet rs2 = ps.executeQuery();
+					if(!rs2.next()) {
+						guestList.add(new User(id, email, username, password, role));
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -97,8 +108,8 @@ public class EventOrganizer extends User{
 		return guestList;
 	}
 	
-	//  fungsi untuk mengambil semua user yang memiliki role vendor dari database
-	public static ArrayList<User> getVendor(){
+	//  fungsi untuk mengambil semua user yang memiliki role vendor yang belum diinvite pada suatu event dari database
+	public static ArrayList<User> getVendor(int event_id){
 		vendorList = new ArrayList<>();
 		String query = "SELECT * FROM users WHERE role = 'vendor'";
 		ResultSet rs = con.execQuery(query);
@@ -110,7 +121,18 @@ public class EventOrganizer extends User{
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
-				vendorList.add(new User(id, email, username, password, role));
+				String query2 = "SELECT * FROM invitations WHERE user_id = ? and event_id = ?";
+				PreparedStatement ps = con.prepareStatement(query2);
+				try {
+					ps.setInt(1, id);
+					ps.setInt(2, event_id);
+					ResultSet rs2 = ps.executeQuery();
+					if(!rs2.next()) {
+						vendorList.add(new Vendor(id ,email, username, password, role));
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

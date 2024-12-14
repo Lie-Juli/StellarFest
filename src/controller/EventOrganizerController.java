@@ -24,14 +24,14 @@ public class EventOrganizerController {
 		return EventOrganizer.checkCreateEventInput(eventName, date, location, description);
 	}
 	
-	// memanggil fungsi getGuest dari model yang akan mendapatkan semua guest
-	public static ArrayList<User> getGuest(){
-		return EventOrganizer.getGuest();
+	// memanggil fungsi getGuest dari model yang akan mendapatkan semua guest yang belum diinvite pada suatu event
+	public static ArrayList<User> getGuest(int event_id){
+		return EventOrganizer.getGuest(event_id);
 	}
 	
-	// memanggil fungsi getVendor dari model yang akan mendapatkan semua vendor
-	public static ArrayList<User> getVendor(){
-		return EventOrganizer.getVendor();
+	// memanggil fungsi getVendor dari model yang akan mendapatkan semua vendor yang belum diinvite pada suatu event
+	public static ArrayList<User> getVendor(int event_id){
+		return EventOrganizer.getVendor(event_id);
 	}
 	
 	// memanggul fungsi viewOrganizedEvents dari model yang akan mendapatkan semua event sesuai dengan event organizer yang membuatnya

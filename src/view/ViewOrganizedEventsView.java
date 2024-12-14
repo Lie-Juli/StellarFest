@@ -22,7 +22,6 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private Scene scene;
 	
 	private FlowPane flowContainer, flowContainerBot;
-	private FlowPane flowContainerId;
 	private FlowPane flowContainerName;
 	private VBox vbox;
 	private TableView<Event> table;
@@ -34,13 +33,13 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	
 	private User organizer = null;
 	private EventOrganizerController eventOrganizerController = new EventOrganizerController();
-	int tempId;
+	private int tempId;
+	private Event eventSelected = null;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		flowContainer = new FlowPane();
 		flowContainerBot = new FlowPane();
-		flowContainerId = new FlowPane();
 		flowContainerName = new FlowPane();
 		
 		editNameLbl = new Label();
@@ -97,7 +96,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		flowContainerName.getChildren().add(editEventNameTf);
 	}
 	
-	// untuk membuat layout table dan mengisi table dengan data
+	// untuk membuat layout table
 	private void setTable() {
 		TableColumn<Event, Integer> idColumn = new TableColumn<Event, Integer>("Id");
 		idColumn.setCellValueFactory(new PropertyValueFactory<Event, Integer>("id"));
@@ -116,11 +115,9 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		locationColumn.setMinWidth(vbox.getWidth()/5);
 		
 		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
-		
-		
 	}
 	
-	// untuk menrefresh data di table agar sesuai dengan yang terbaru
+	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
 		ObservableList<Event> events = FXCollections.observableArrayList(EventOrganizerController.viewOrganizedEvents(organizer.getUserID()));
 		table.setItems(events);
@@ -150,7 +147,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 				// TODO Auto-generated method stub
 				TableSelectionModel<Event> tsm = table.getSelectionModel();
 				tsm.setSelectionMode(SelectionMode.SINGLE);
-				Event eventSelected = tsm.getSelectedItem();
+				eventSelected = tsm.getSelectedItem();
 				editEventNameTf.setText(eventSelected.getName());
 				tempId = eventSelected.getId();
 			}
@@ -190,6 +187,24 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 			}
 			
 			refreshTable();
+		}
+		// jika menekan tombol addGuest akan mengecek apakah ada event yang terpilih, jika iya baru akan menredirect ke AddGuest View
+		else if(event.getSource() == addGuestBtn) {
+			if(eventSelected == null) {
+				errorLbl.setText("Please Choose an Event to add guest");
+			}
+			else {
+				new AddGuestView(stage, organizer, eventSelected);
+			}
+		}
+		// jika menekan tombol addVendor akan mengecek apakah ada event yang terpilih, jika iya baru akan menredirect ke AddVendor View
+		else if(event.getSource() == addVendorBtn) {
+			if(eventSelected == null) {
+				errorLbl.setText("Please Choose an Event to add vendor");
+			}
+			else {
+				new AddVendorView(stage, organizer, eventSelected);
+			}
 		}
 	}
 	
