@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 10:45 PM
+-- Generation Time: Dec 14, 2024 at 08:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `events`
 --
 
+DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(100) NOT NULL,
@@ -41,9 +42,25 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`event_id`, `event_name`, `event_date`, `event_location`, `event_description`, `organizer_id`) VALUES
-(1, 'Gaming Event', '2024-12-14', 'Jakarta', 'We Are Gaming Tonight', 2),
+(1, 'Gamings Event', '2024-12-14', 'Jakarta', 'We Are Gaming Tonight', 2),
 (2, 'Sport Event', '2025-03-11', 'Bogor', 'This is A Sport Event', 2),
-(3, 'Study Event', '2025-06-18', 'Jakarta', 'Nerd Event HeHe', 2);
+(3, 'Study Event', '2025-06-18', 'Jakarta', 'Nerd Event HeHe', 2),
+(4, 'Crazy Valorant Event', '2024-12-26', 'Jakarta', 'Valorant Pew Pew', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invitations`
+--
+
+DROP TABLE IF EXISTS `invitations`;
+CREATE TABLE `invitations` (
+  `invitation_id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `invitation_status` varchar(100) NOT NULL,
+  `invitation_role` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -51,6 +68,7 @@ INSERT INTO `events` (`event_id`, `event_name`, `event_date`, `event_location`, 
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -65,8 +83,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `username`, `password`, `role`) VALUES
 (1, 'admin', 'admin', 'admin', 'admin'),
-(2, 'julius@gmail.com', 'Julius', 'julius', 'event organizer'),
-(3, 'org', 'org', 'org', 'event organizer');
+(2, 'julius@gmail.com', 'julius', 'julius', 'event organizer'),
+(3, 'delon@gmail.com', 'delon', 'delon', 'vendor'),
+(4, 'william@gmail.com', 'william', 'williams', 'event organizer'),
+(5, 'jeremy@gmail.com', 'jeremy', 'jeremy', 'guest');
 
 --
 -- Indexes for dumped tables
@@ -78,6 +98,14 @@ INSERT INTO `users` (`id`, `email`, `username`, `password`, `role`) VALUES
 ALTER TABLE `events`
   ADD PRIMARY KEY (`event_id`),
   ADD KEY `organizer_id` (`organizer_id`);
+
+--
+-- Indexes for table `invitations`
+--
+ALTER TABLE `invitations`
+  ADD PRIMARY KEY (`invitation_id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -95,13 +123,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `invitations`
+--
+ALTER TABLE `invitations`
+  MODIFY `invitation_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -112,6 +146,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`organizer_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `invitations`
+--
+ALTER TABLE `invitations`
+  ADD CONSTRAINT `invitations_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
+  ADD CONSTRAINT `invitations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
