@@ -148,8 +148,10 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 				TableSelectionModel<Event> tsm = table.getSelectionModel();
 				tsm.setSelectionMode(SelectionMode.SINGLE);
 				eventSelected = tsm.getSelectedItem();
-				editEventNameTf.setText(eventSelected.getName());
-				tempId = eventSelected.getId();
+				if(eventSelected != null) {
+					editEventNameTf.setText(eventSelected.getName());
+					tempId = eventSelected.getId();
+				}
 			}
 		};
 }

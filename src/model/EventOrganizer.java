@@ -78,28 +78,19 @@ public class EventOrganizer extends User{
 	// fungsi untuk mengambil semua user yang memiliki role guest yang belum diinvite pada suatu event dari database
 	public static ArrayList<User> getGuest(int event_id){
 		guestList = new ArrayList<>();
-		String query = "SELECT * FROM users WHERE role = 'guest'";
-		ResultSet rs = con.execQuery(query);
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'guest' AND (NOT invitations.user_id IN (SELECT invitations.user_id FROM invitations WHERE invitations.event_id = ?) OR invitations.event_id is NULL) GROUP BY users.id ORDER BY users.id ASC";
+		PreparedStatement ps = con.prepareStatement(query);
 		
 		try {
+			ps.setInt(1, event_id);
+			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				Integer id = rs.getInt("id");
 				String email = rs.getString("email");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
-				String query2 = "SELECT * FROM invitations WHERE user_id = ? and event_id = ?";
-				PreparedStatement ps = con.prepareStatement(query2);
-				try {
-					ps.setInt(1, id);
-					ps.setInt(2, event_id);
-					ResultSet rs2 = ps.executeQuery();
-					if(!rs2.next()) {
-						guestList.add(new User(id, email, username, password, role));
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				guestList.add(new Vendor(id ,email, username, password, role));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,28 +102,19 @@ public class EventOrganizer extends User{
 	//  fungsi untuk mengambil semua user yang memiliki role vendor yang belum diinvite pada suatu event dari database
 	public static ArrayList<User> getVendor(int event_id){
 		vendorList = new ArrayList<>();
-		String query = "SELECT * FROM users WHERE role = 'vendor'";
-		ResultSet rs = con.execQuery(query);
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'vendor' AND (NOT invitations.user_id IN (SELECT invitations.user_id FROM invitations WHERE invitations.event_id = ?) OR invitations.event_id is NULL) GROUP BY users.id ORDER BY users.id ASC";
+		PreparedStatement ps = con.prepareStatement(query);
 		
 		try {
+			ps.setInt(1, event_id);
+			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				Integer id = rs.getInt("id");
 				String email = rs.getString("email");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
-				String query2 = "SELECT * FROM invitations WHERE user_id = ? and event_id = ?";
-				PreparedStatement ps = con.prepareStatement(query2);
-				try {
-					ps.setInt(1, id);
-					ps.setInt(2, event_id);
-					ResultSet rs2 = ps.executeQuery();
-					if(!rs2.next()) {
-						vendorList.add(new Vendor(id ,email, username, password, role));
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				vendorList.add(new Vendor(id ,email, username, password, role));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

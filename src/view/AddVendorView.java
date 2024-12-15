@@ -30,7 +30,6 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	private User organizer = null;
 	private Event event = null;
 	private ObservableList<User> userSelected;
-	private int tempId;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
@@ -91,7 +90,7 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	
 	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
-		ObservableList<User> vendors = FXCollections.observableArrayList(EventOrganizerController.getVendor(tempId));
+		ObservableList<User> vendors = FXCollections.observableArrayList(EventOrganizerController.getVendor(event.getId()));
 		table.setItems(vendors);
 	}
 	
