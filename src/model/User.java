@@ -67,23 +67,19 @@ public class User {
 	}
 
 	//fungsi untuk melakukan register user baru yang kemudian akan dimasukan kedalam database
-	public static int register(String email, String username, String password, String role) {
+	public static void register(String email, String username, String password, String role) {
 		String query = "INSERT INTO users(email, username, password, role) VALUES(?, ?, ?, ?)";
 		PreparedStatement ps = con.prepareStatement(query);
-		
-		int success = 0;
 		
 		try {
 			ps.setString(1, email);
 			ps.setString(2, username);
 			ps.setString(3, password);
 			ps.setString(4, role);
-			success = ps.executeUpdate();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return success;
 	}
 	
 	//fungsi untuk melakukan login
@@ -170,7 +166,7 @@ public class User {
 			return "password length must be greater than 5!";
 		}
 		// jika role tidak dipilih oleh user
-		else if(role.isEmpty()) {
+		else if(role == null) {
 			return "role must be chosen";
 		}
 		

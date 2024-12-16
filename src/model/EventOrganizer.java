@@ -7,12 +7,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import controller.EventController;
+import controller.InvitationController;
+import javafx.collections.ObservableList;
 import util.Connect;
 
 public class EventOrganizer extends User{
 	private static Connect con = getCon();
 	
-	// untuk menyimpan event apa saja yang telah dibuat event organizer
+	// // data-data apa saja yang dimiliki event organizer
 	private static ArrayList<Event> eventsCreated;
 	private static ArrayList<User> guestList;
 	private static ArrayList<User> vendorList;
@@ -31,9 +33,9 @@ public class EventOrganizer extends User{
 	}
 
 	
-	// untuk memangil function createEvent dari model event melalui controllernya
-	public static int createEvent(String eventName, String date, String location, String description, int organizer_id) {
-		return EventController.createEvent(eventName, date, location, description, organizer_id);
+	// untuk memangil function createEvent dari model event melalui controllernya yang akan membuat event
+	public static void createEvent(String eventName, String date, String location, String description, int organizer_id) {
+		EventController.createEvent(eventName, date, location, description, organizer_id);
 		
 	}
 	
@@ -180,4 +182,37 @@ public class EventOrganizer extends User{
 		con.execUpdate(query);
 		return true;
 	}
+	
+	//untuk memangil function sendInvitation dari model event melalui controllernya yang akan membuat invitation untuk vendor
+	public static void addVendor(ObservableList<User> users, int event_id) {
+		for (User u : users) {
+			InvitationController.sendInvitation(event_id, u.getUserID(), "vendor");
+		}
+	}
+	
+	//untuk memangil function sendInvitation dari model event melalui controllernya yang akan membuat invitation untuk guest
+	public static void addGuest(ObservableList<User> users, int event_id) {
+		for (User u : users) {
+			InvitationController.sendInvitation(event_id, u.getUserID(), "guest");
+		}
+	}
+	
+	// untuk memvalidasi input dari addVendor
+	public static String checkAddVendorInput(ObservableList<User> users) {
+		if(users == null) {
+			return "Please select at least one vendor to add to this event";
+		}
+		
+		return "add vendor success";
+	}
+	
+	// untuk memvalidasi input dari addGuest
+	public static String checkAddGuestInput(ObservableList<User> users) {
+		if(users == null) {
+			return "Please select at least one guest to add to this event";
+		}
+		
+		return "add guest success";
+	}
+	
 }

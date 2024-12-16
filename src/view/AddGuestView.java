@@ -23,12 +23,12 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 	private FlowPane flowContainer;
 	private VBox vbox;
 	private TableView<User> table;
-	private Label errorLbl;
+	private Label errorLbl, titleLbl;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addGuestBtn;
 	private Button logoutBtn, changeProfileBtn;
 	
 	private User organizer = null;
-	private Event event = null;
+	private Event eventSelected = null;
 	private ObservableList<User> userSelected;
 	
 	//menginisialisasi komponen dan pembuatan scene
@@ -36,6 +36,8 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 		flowContainer = new FlowPane();
 		
 		errorLbl = new Label();
+		titleLbl = new Label();
+		titleLbl.setText("Event ID: " + eventSelected.getId() + " \tEvent Name: " + eventSelected.getName());
 		
 		table = new TableView<User>();
 		table.setOnMouseClicked(tableMouseEvent());
@@ -55,7 +57,7 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 		addGuestBtn = new Button("Add Guest");
 		addGuestBtn.setOnAction(this);
 		
-		vbox = new VBox(10, flowContainer, table, addGuestBtn, errorLbl);
+		vbox = new VBox(10, flowContainer, titleLbl, table, addGuestBtn, errorLbl);
 		scene = new Scene(vbox, 700, 500);
 	}
 	
@@ -90,7 +92,7 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 	
 	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
-		ObservableList<User> guest = FXCollections.observableArrayList(EventOrganizerController.getGuest(event.getId()));
+		ObservableList<User> guest = FXCollections.observableArrayList(EventOrganizerController.getGuest(eventSelected.getId()));
 		table.setItems(guest);
 	}
 	
@@ -98,7 +100,7 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 	public AddGuestView(Stage stage, User user, Event event) {
 		this.stage = stage;
 		this.organizer = user;
-		this.event = event;
+		this.eventSelected = event;
 		init();
 		addComponent();
 		setTable();
@@ -111,7 +113,7 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 	// untuk mendapatkan data beberapa users dari table hanya dengan click menggunakan mouse
 	private EventHandler<MouseEvent> tableMouseEvent(){
 		return new EventHandler<MouseEvent>() {
-			
+			// untuk memilih beberapa user gunakan ctrl + click
 			@Override
 			public void handle(MouseEvent event) {
 				// TODO Auto-generated method stub
@@ -139,6 +141,13 @@ public class AddGuestView implements EventHandler<ActionEvent> {
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
+		}
+		// jika menekan add guest akan mendapatkan guests yang dipilih oleh event organizer kemudian menjalankan validasi, 
+		// jika berhasil melewati validasi maka akan membuat invitation baru kepada semua guests yang dipilih
+		else if(event.getSource() == addGuestBtn) {
+			String message = EventOrganizerController.addGuest(userSelected, eventSelected.getId());
+			errorLbl.setText(message);
+			refreshTable();
 		}
 		
 	}

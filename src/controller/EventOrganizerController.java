@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
+import javafx.collections.ObservableList;
 import model.Event;
 import model.EventOrganizer;
 import model.User;
@@ -42,5 +43,35 @@ public class EventOrganizerController {
 	// Method untuk edit event name
 	public boolean editEventName (int eventId, String newEventName) {	
 		return EventOrganizer.editEventName(eventId, newEventName);
+	}
+	
+	// untuk membuat invitation kepada vendor jika berhasil melewati validasi
+	public static String addVendor(ObservableList<User> users, int event_id) {
+		String message = checkAddVendorInput(users);
+		if(message.equals("add vendor success")) {
+			EventOrganizer.addVendor(users, event_id);
+		}
+		
+		return message;
+	}
+	
+	// untuk membuat invitation kepada guest jika berhasil melewati validasi
+	public static String addGuest(ObservableList<User> users, int event_id) {
+		String message = chechAddGuestInput(users);
+		if(message.equals("add guest success")) {
+			EventOrganizer.addGuest(users, event_id);
+		}
+		
+		return message;
+	}
+	
+	// memanggil function checkAddVendorInput dari model yang akan memvalidasi input dari addVendor
+	public static String checkAddVendorInput(ObservableList<User> users) {
+		return EventOrganizer.checkAddVendorInput(users);
+	}
+	
+	// memanggil function checkAddGuestInput dari model yang akan memvalidasi input dari addGuest
+	public static String chechAddGuestInput(ObservableList<User> users) {
+		return EventOrganizer.checkAddGuestInput(users);
 	}
 }

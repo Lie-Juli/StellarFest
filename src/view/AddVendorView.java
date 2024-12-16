@@ -23,19 +23,21 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	private FlowPane flowContainer;
 	private VBox vbox;
 	private TableView<User> table;
-	private Label errorLbl;
+	private Label errorLbl, titleLbl;
 	private Button viewOrganizedEventBtn, createEventPageBtn, addVendorBtn;
 	private Button logoutBtn, changeProfileBtn;
 	
 	private User organizer = null;
-	private Event event = null;
-	private ObservableList<User> userSelected;
+	private Event eventSelected = null;
+	private ObservableList<User> usersSelected;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		flowContainer = new FlowPane();
 		
 		errorLbl = new Label();
+		titleLbl = new Label();
+		titleLbl.setText("Event ID: " + eventSelected.getId() + " \tEvent Name: " + eventSelected.getName());
 		
 		table = new TableView<User>();
 		table.setOnMouseClicked(tableMouseEvent());
@@ -55,7 +57,7 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 		addVendorBtn = new Button("Add Vendor");
 		addVendorBtn.setOnAction(this);
 		
-		vbox = new VBox(10, flowContainer, table, addVendorBtn, errorLbl);
+		vbox = new VBox(10, flowContainer, titleLbl, table, addVendorBtn, errorLbl);
 		scene = new Scene(vbox, 700, 500);
 	}
 	
@@ -90,7 +92,7 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	
 	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
-		ObservableList<User> vendors = FXCollections.observableArrayList(EventOrganizerController.getVendor(event.getId()));
+		ObservableList<User> vendors = FXCollections.observableArrayList(EventOrganizerController.getVendor(eventSelected.getId()));
 		table.setItems(vendors);
 	}
 	
@@ -98,7 +100,7 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	public AddVendorView(Stage stage, User user, Event event) {
 		this.stage = stage;
 		this.organizer = user;
-		this.event = event;
+		this.eventSelected = event;
 		init();
 		addComponent();
 		setTable();
@@ -111,13 +113,13 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	// untuk mendapatkan data beberapa users dari table hanya dengan click menggunakan mouse
 	private EventHandler<MouseEvent> tableMouseEvent(){
 		return new EventHandler<MouseEvent>() {
-			
+			// untuk memilih beberapa user gunakan ctrl + click
 			@Override
 			public void handle(MouseEvent event) {
 				// TODO Auto-generated method stub
 				TableSelectionModel<User> tsm = table.getSelectionModel();
 				tsm.setSelectionMode(SelectionMode.MULTIPLE);
-				userSelected = tsm.getSelectedItems();
+				usersSelected = tsm.getSelectedItems();
 			}
 		};
 	}
@@ -139,6 +141,13 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
+		}
+		// jika menekan add vendor akan mendapatkan vendors yang dipilih oleh event organizer kemudian menjalankan validasi, 
+		// jika berhasil melewati validasi maka akan membuat invitation baru kepada semua vendors yang dipilih
+		else if(event.getSource() == addVendorBtn) {
+			String message = EventOrganizerController.addVendor(usersSelected, eventSelected.getId());
+			errorLbl.setText(message);
+			refreshTable();
 		}
 		
 	}

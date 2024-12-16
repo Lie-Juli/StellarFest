@@ -66,11 +66,9 @@ public class Event {
 	}
 	
 	// fungsi untuk membuat event baru dan kemudian memasukannya ke dalam database
-	public static int createEvent(String eventName, String date, String location, String description, int organizer_id) {
+	public static void createEvent(String eventName, String date, String location, String description, int organizer_id) {
 		String query = "INSERT INTO events(event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
 		PreparedStatement ps = con.prepareStatement(query);
-		
-		int success = 0;
 		
 		try {
 			ps.setString(1, eventName);
@@ -78,12 +76,9 @@ public class Event {
 			ps.setString(3, location);
 			ps.setString(4, description);
 			ps.setInt(5, organizer_id);
-			success = ps.executeUpdate();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return success;
-		
 	}
 }
