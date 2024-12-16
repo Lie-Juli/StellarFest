@@ -3,6 +3,7 @@ package view;
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,6 +66,7 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		viewUserBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, emailLbl, emailTxt, usernameLbl, usernameTxt, oldPasswordLbl, oldPasswordTxt, newPasswordLbl, newPasswordTxt, changeProfileBtn, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	

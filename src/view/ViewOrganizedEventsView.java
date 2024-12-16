@@ -81,7 +81,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		scene = new Scene(vbox, 700, 500);
 	}
 	
-	// menambahkan component yang akan masuk ke dalam flowpane kita dimana flowpane ini akan bekerja sebagai navbar(flowContainer) dan footer(flowContainerBot)
+	// menambahkan component yang akan masuk ke dalam flowpane kita, dimana flowpane ini akan bekerja sebagai navbar(flowContainer) dan footer(flowContainerBot)
 	private void addComponent() {
 		flowContainer.getChildren().add(viewOrganizedEventBtn);
 		flowContainer.getChildren().add(createEventPageBtn);
@@ -100,19 +100,19 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 	private void setTable() {
 		TableColumn<Event, Integer> idColumn = new TableColumn<Event, Integer>("Id");
 		idColumn.setCellValueFactory(new PropertyValueFactory<Event, Integer>("id"));
-		idColumn.setMinWidth(vbox.getWidth()/5);
+		idColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<Event, String> nameColumn = new TableColumn<Event, String>("Name");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Event, String>("name"));
-		nameColumn.setMinWidth(vbox.getWidth()/5);
+		nameColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<Event, String> dateColumn = new TableColumn<Event, String>("Date");
 		dateColumn.setCellValueFactory(new PropertyValueFactory<Event, String>("date"));
-		dateColumn.setMinWidth(vbox.getWidth()/5);
+		dateColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<Event, String> locationColumn = new TableColumn<Event, String>("Location");
 		locationColumn.setCellValueFactory(new PropertyValueFactory<Event, String>("location"));
-		locationColumn.setMinWidth(vbox.getWidth()/5);
+		locationColumn.setMinWidth(vbox.getWidth()/4);
 		
 		table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
 	}
@@ -206,6 +206,15 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 			}
 			else {
 				new AddVendorView(stage, organizer, eventSelected);
+			}
+		}
+		
+		else if(event.getSource() == DetailsBtn) {
+			if(eventSelected == null) {
+				errorLbl.setText("Please Choose an event to view the details");
+			}
+			else {
+				new ViewEventDetailView(stage, organizer, eventSelected);
 			}
 		}
 	}

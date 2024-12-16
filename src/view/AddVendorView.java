@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -58,6 +59,7 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 		addVendorBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, titleLbl, table, addVendorBtn, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	
@@ -73,19 +75,19 @@ public class AddVendorView implements EventHandler<ActionEvent> {
 	private void setTable() {
 		TableColumn<User, Integer> idColumn = new TableColumn<User, Integer>("Id");
 		idColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("userID"));
-		idColumn.setMinWidth(vbox.getWidth()/5);
+		idColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<User, String> emailColumn = new TableColumn<User, String>("Email");
 		emailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-		emailColumn.setMinWidth(vbox.getWidth()/5);
+		emailColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<User, String> usernameColumn = new TableColumn<User, String>("Username");
 		usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
-		usernameColumn.setMinWidth(vbox.getWidth()/5);
+		usernameColumn.setMinWidth(vbox.getWidth()/4);
 		
 		TableColumn<User, String> roleColumn = new TableColumn<User, String>("Role");
 		roleColumn.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
-		roleColumn.setMinWidth(vbox.getWidth()/5);
+		roleColumn.setMinWidth(vbox.getWidth()/4);
 		
 		table.getColumns().addAll(idColumn, emailColumn, usernameColumn, roleColumn);
 	}

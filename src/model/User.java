@@ -170,32 +170,18 @@ public class User {
 			return "role must be chosen";
 		}
 		
-		// ini logic untuk menemukan apakah user dengan email tersebut sudah ada
-		String query = "SELECT * FROM users WHERE email = ?";
-		PreparedStatement ps = con.prepareStatement(query);
+		// untuk menemukan apakah user dengan email tersebut sudah ada
+		User user = getUserByEmail(email);
 		
-		try {
-			ps.setString(1, email);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				return "email already taken";
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(user != null) {
+			return "email already taken";
 		}
 		
-		// ini logic untuk menemukan apakah user dengan username tersebut sudah ada
-		query = "SELECT * FROM users WHERE username = ?";
-		ps = con.prepareStatement(query);
+		// untuk menemukan apakah user dengan username tersebut sudah ada
+		user = getUserByUsername(username);
 		
-		try {
-			ps.setString(1, username);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				return "username already taken";
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(user != null) {
+			return "username already taken";
 		}
 		
 		// jika sudah melewati semua validasi
@@ -212,7 +198,7 @@ public class User {
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				int id = rs.getInt("userID");
+				int id = rs.getInt("id");
 				String user_email = rs.getString("email");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
@@ -237,7 +223,7 @@ public class User {
 			ps.setString(1, name);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				int id = rs.getInt("userID");
+				int id = rs.getInt("id");
 				String email = rs.getString("email");
 				String username = rs.getString("username");
 				String password = rs.getString("password");

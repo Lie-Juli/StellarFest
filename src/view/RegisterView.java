@@ -4,6 +4,7 @@ import controller.UserController;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -48,6 +49,7 @@ public class RegisterView {
 		RegistBtn = new Button("Register");
 			
 		vbox = new VBox(10, emailLbl, emailTxt, usernameLbl, usernameTxt, passwordLbl, passwordTxt, roleLbl, role_cb, RegistBtn, loginBtn, errorLbl);
+		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
 	
