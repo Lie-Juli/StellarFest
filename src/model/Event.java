@@ -98,7 +98,7 @@ public class Event {
 				String location = rs.getString("event_location");
 				String description = rs.getString("event_description");
 				int organizer_id =rs.getInt("organizer_id");
-				return new Event(event_id, name, date, location, description, organizer_id);
+				return new Event(id, name, date, location, description, organizer_id);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
