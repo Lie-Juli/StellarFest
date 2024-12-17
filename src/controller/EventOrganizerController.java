@@ -74,4 +74,19 @@ public class EventOrganizerController {
 	public static String chechAddGuestInput(ObservableList<User> users) {
 		return EventOrganizer.checkAddGuestInput(users);
 	}
+	
+	// memanggil fungsi getGuestByTransactionID dari model yang akan mendapatkan semua guest yang sudah diinvite pada suatu event tertentu
+	public static ArrayList<User> getGuestByTransactionID(int eventID){
+		return EventOrganizer.getGuestByTransactionID(eventID);
+	}
+	
+	// memanggil fungsi getVendorByTransactionID dari model yang akan mendapatkan semua vendor yang sudah diinvite pada suatu event tertentu
+	public static ArrayList<User> getVendorByTransactionID(int eventID){
+		return EventOrganizer.getVendorByTransactionID(eventID);
+	}
+	
+	//memanggil fungsi getOrganizerById dari model yang akan mendapatkan event organizer bedasarakan idnya
+	public static User getOrganizerById(int user_id) {
+		return EventOrganizer.getOrganizerById(user_id);
+	}
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import util.Connect;
@@ -80,5 +81,29 @@ public class Event {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// fungsi untuk mengambil data-data dari suatu event tertentu
+	public static Event viewEventDetail(int event_id) {
+		String query = "SELECT * FROM events where events.event_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setInt(1, event_id);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				Integer id = rs.getInt("event_id");
+				String name = rs.getString("event_name");
+				String date = rs.getString("event_date");
+				String location = rs.getString("event_location");
+				String description = rs.getString("event_description");
+				int organizer_id =rs.getInt("organizer_id");
+				return new Event(event_id, name, date, location, description, organizer_id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

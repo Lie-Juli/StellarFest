@@ -15,9 +15,9 @@ public class EventOrganizer extends User{
 	private static Connect con = getCon();
 	
 	// // data-data apa saja yang dimiliki event organizer
-	private static ArrayList<Event> eventsCreated;
-	private static ArrayList<User> guestList;
-	private static ArrayList<User> vendorList;
+	private static ArrayList<Event> eventsCreated = new ArrayList<Event>();
+	private static ArrayList<User> guestList = new ArrayList<User>();
+	private static ArrayList<User> vendorList = new ArrayList<User>();
 	
 	public EventOrganizer(int userID, String email, String username, String password, String role) {
 		super(userID, email, username, password, role);
@@ -36,7 +36,6 @@ public class EventOrganizer extends User{
 	// untuk memangil function createEvent dari model event melalui controllernya yang akan membuat event
 	public static void createEvent(String eventName, String date, String location, String description, int organizer_id) {
 		EventController.createEvent(eventName, date, location, description, organizer_id);
-		
 	}
 	
 	// untuk memvalidasi input dari createEvent
@@ -79,7 +78,7 @@ public class EventOrganizer extends User{
 	
 	// fungsi untuk mengambil semua user yang memiliki role guest yang belum diinvite pada suatu event dari database
 	public static ArrayList<User> getGuest(int event_id){
-		guestList = new ArrayList<>();
+		guestList.clear();
 		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'guest' AND (NOT invitations.user_id IN (SELECT invitations.user_id FROM invitations WHERE invitations.event_id = ?) OR invitations.event_id is NULL) GROUP BY users.id ORDER BY users.id ASC";
 		PreparedStatement ps = con.prepareStatement(query);
 		
@@ -101,9 +100,9 @@ public class EventOrganizer extends User{
 		return guestList;
 	}
 	
-	//  fungsi untuk mengambil semua user yang memiliki role vendor yang belum diinvite pada suatu event dari database
+	// fungsi untuk mengambil semua user yang memiliki role vendor yang belum diinvite pada suatu event dari database
 	public static ArrayList<User> getVendor(int event_id){
-		vendorList = new ArrayList<>();
+		vendorList.clear();
 		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'vendor' AND (NOT invitations.user_id IN (SELECT invitations.user_id FROM invitations WHERE invitations.event_id = ?) OR invitations.event_id is NULL) GROUP BY users.id ORDER BY users.id ASC";
 		PreparedStatement ps = con.prepareStatement(query);
 		
@@ -127,7 +126,7 @@ public class EventOrganizer extends User{
 	
 	// fungsi untuk mengambil semua event yang memiliki userId yang sama dari database
 	public static ArrayList<Event> viewOrganizedEvents(int userId){
-		eventsCreated = new ArrayList<>();
+		eventsCreated.clear();
 		String query = "SELECT * FROM events WHERE organizer_id = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		
@@ -215,4 +214,74 @@ public class EventOrganizer extends User{
 		return "add guest success";
 	}
 	
+	// fungsi untuk mengambil semua user yang memiliki role guest yang sudah diinvite pada suatu event tertentu
+	public static ArrayList<User> getGuestByTransactionID(int eventID){
+		guestList.clear();
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'guest' AND invitations.event_id = ? ORDER BY users.id ASC";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setInt(1, eventID);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt("id");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				guestList.add(new Guest(id, email, username, password, role));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return guestList;
+	}
+	
+	// fungsi untuk mengambil semua user yang memiliki role vendor yang sudah diinvite pada suatu event tertentu
+	public static ArrayList<User> getVendorByTransactionID(int eventID){
+		vendorList.clear();
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'vendor' AND invitations.event_id = ? ORDER BY users.id ASC";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setInt(1, eventID);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt("id");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				vendorList.add(new Vendor(id, email, username, password, role));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return vendorList;
+	}
+	
+	// untuk mendapatkan event organizer bedasarakan idnya
+	public static User getOrganizerById(int user_id) {
+		String query = "SELECT * FROM users WHERE users.id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		
+		try {
+			ps.setInt(1, user_id);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				Integer id = rs.getInt("id");
+				String email = rs.getString("email");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				String role = rs.getString("role");
+				return new EventOrganizer(id, email, username, password, role);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 }

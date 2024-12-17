@@ -214,7 +214,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 				errorLbl.setText("Please Choose an event to view the details");
 			}
 			else {
-				new ViewEventDetailView(stage, organizer, eventSelected);
+				new ViewEventDetailView(stage, organizer, tempId);
 			}
 		}
 	}

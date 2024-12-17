@@ -1,5 +1,6 @@
 package view;
 
+import controller.EventController;
 import controller.EventOrganizerController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +30,9 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 	private VBox vbox;
 		
 	private User user = null;
+	private int event_id;
 	private Event eventSelected = null;
+	private User organizer = null;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
@@ -37,7 +40,7 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		grid = new GridPane();
 			
 		event_idLbl = new Label();
-		event_idLbl.setText("Event ID: " + eventSelected.getId());
+		event_idLbl.setText("Event ID: " + event_id);
 			
 		event_nameLbl = new Label();
 		event_nameLbl.setText("Event Name: " + eventSelected.getName());
@@ -49,7 +52,9 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		event_locationLbl.setText("Event Location: " + eventSelected.getLocation());
 			
 		event_organizedIdLbl = new Label();
-		event_organizedIdLbl.setText("Event Organizer: " + eventSelected.getOrganizerID());
+		// untuk mendapatkan data email dan username organizernya 
+		organizer = EventOrganizerController.getOrganizerById(eventSelected.getOrganizerID()); 
+		event_organizedIdLbl.setText("Event Organizer: " + organizer.getUsername() + " (" + organizer.getEmail() + ")");
 			
 		event_descriptionLbl = new Label();
 		event_descriptionLbl.setText("Event Description: ");
@@ -102,36 +107,49 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		
 		grid.add(guestListLbl, 0, 0);
 		grid.add(vendorListLbl, 1, 0);
-		grid.add(vendorTable, 0, 1);
-		grid.add(guestTable, 1, 1);
+		grid.add(vendorTable, 1, 1);
+		grid.add(guestTable, 0, 1);
 		grid.setHgap(15);
 	}
 	
 	// untuk membuat layout table
 	private void setTable() {
-		TableColumn<User, Integer> idColumn = new TableColumn<User, Integer>("Id");
-		idColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("userID"));
+		TableColumn<User, Integer> guestIdColumn = new TableColumn<User, Integer>("Id");
+		guestIdColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("userID"));
 		
-		TableColumn<User, String> emailColumn = new TableColumn<User, String>("Email");
-		emailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+		TableColumn<User, Integer> vendorIdColumn = new TableColumn<User, Integer>("Id");
+		vendorIdColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("userID"));
 		
-		TableColumn<User, String> usernameColumn = new TableColumn<User, String>("Username");
-		usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+		TableColumn<User, String> guestEmailColumn = new TableColumn<User, String>("Email");
+		guestEmailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
 		
-		guestTable.getColumns().addAll(idColumn, emailColumn, usernameColumn);
-		vendorTable.getColumns().addAll(idColumn, emailColumn, usernameColumn);
+		TableColumn<User, String> vendorEmailColumn = new TableColumn<User, String>("Email");
+		vendorEmailColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+		
+		TableColumn<User, String> guestUsernameColumn = new TableColumn<User, String>("Username");
+		guestUsernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+		
+		TableColumn<User, String> vendorUsernameColumn = new TableColumn<User, String>("Username");
+		vendorUsernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+		
+		guestTable.getColumns().addAll(guestIdColumn, guestEmailColumn, guestUsernameColumn);
+		vendorTable.getColumns().addAll(vendorIdColumn, vendorEmailColumn, vendorUsernameColumn);
 	}
 	
 	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
-		
+		ObservableList<User> guests = FXCollections.observableArrayList(EventOrganizerController.getGuestByTransactionID(event_id));
+		guestTable.setItems(guests);
+ 		ObservableList<User> vendors = FXCollections.observableArrayList(EventOrganizerController.getVendorByTransactionID(event_id));
+ 		vendorTable.setItems(vendors);
 	}
 	
 	// pembuatan stage yang akan menunjukan viewEventDetail view
-	public ViewEventDetailView(Stage stage, User user, Event event) {
+	public ViewEventDetailView(Stage stage, User user, int event_id) {
 		this.stage = stage;
 		this.user = user;
-		eventSelected = event;
+		this.event_id = event_id;
+		eventSelected = EventController.viewEventDetail(event_id);
 		init();
 		addComponent();
 		setTable();
