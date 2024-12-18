@@ -11,10 +11,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableSelectionModel;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -33,9 +36,7 @@ public class UserView implements EventHandler<ActionEvent>{
 	private VBox vbox;
 	private TableView<User> table;
 	private Label titleLabel;
-	private Label idLabel;
 	private Label errorLabel;
-	private TextField idInput;
 	private Button deleteBtn;
 	private Button viewEventBtn;
 	private Button viewUserBtn;
@@ -45,8 +46,9 @@ public class UserView implements EventHandler<ActionEvent>{
 	private AdminController adminController = new AdminController();
 	
 	private User user;
-	
+	private User userSelected = null;
 	private ArrayList<User> userList;
+	private int tempId;
 	
 	// Inisialisasi component
 	public void init() {
@@ -54,9 +56,7 @@ public class UserView implements EventHandler<ActionEvent>{
 		
 		flowContainer = new FlowPane();
 		titleLabel = new Label("View Users Page");
-		idLabel = new Label("User Id: ");
 		errorLabel = new Label();
-		idInput = new TextField();
 
 		deleteBtn = new Button("Delete");
 		deleteBtn.setOnAction(this);
@@ -70,8 +70,9 @@ public class UserView implements EventHandler<ActionEvent>{
 		changeProfileBtn.setOnAction(this);
 		
 		table = new TableView<User>();
+		table.setOnMouseClicked(tableMouseEvent());
 		
-		vbox = new VBox(10, titleLabel, flowContainer, table,  idLabel, idInput, deleteBtn, errorLabel);
+		vbox = new VBox(10, titleLabel, flowContainer, table, deleteBtn, errorLabel);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -127,29 +128,41 @@ public class UserView implements EventHandler<ActionEvent>{
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	// untuk mendapatkan data users dari table hanya dengan click menggunakan mouse
+		private EventHandler<MouseEvent> tableMouseEvent(){
+			return new EventHandler<MouseEvent>() {
+				// untuk memilih beberapa user gunakan ctrl + click
+				@Override
+				public void handle(MouseEvent event) {
+					// TODO Auto-generated method stub
+					TableSelectionModel<User> tsm = table.getSelectionModel();
+					tsm.setSelectionMode(SelectionMode.SINGLE);
+					userSelected = tsm.getSelectedItem();
+					if(userSelected != null) {
+						tempId = userSelected.getUserID();
+					}
+				}
+			};
+		}
 
 	// Handling events, button-button click listener
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
-			if (idInput.getText().equals("")) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
-				errorLabel.setText("Input field can't be empty!");
-				
-			}else { // Jika input field tidak kosong, validasi input & refresh table view.
-				String id = idInput.getText();
-				
+			if (userSelected == null) { // Check apakah user dipilih. Jika tidak, error label yang sesuai muncul 
+				errorLabel.setText("Please choose a user to delete!");
+			}else { // Jika user dipilih, validasi input & refresh table view.
 				// Check apakah berhasil dihapus/ input valid. (panggil method di admin controller)
-				Boolean valid = adminController.deleteUser(id, connect);
+				Boolean valid = adminController.deleteUser(tempId, connect);
 
 				if (valid) { // jika valid confirmasi lewat error label
 					errorLabel.setText("Data deleted!");
-					
 				}else { // jika tidak valid munculkan error label yang sesuai
-					errorLabel.setText("Enter a valid id!");
+					errorLabel.setText("Failed!");
 				}
 				//refresh table
 				viewAllUser();
-				
 			}
 		}
 		else if (event.getSource() == viewEventBtn) { // Jika button yang di click adalah view event button, redirect ke page event view page

@@ -162,16 +162,16 @@ public class EventView implements EventHandler<ActionEvent>{
 		
 		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
 			
-			if (eventSelected == null) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
-				errorLabel.setText("Please Choose an event to delete!");
-			}else { // Jika input field tidak kosong, validasi input & refresh table view.
+			if (eventSelected == null) { // Check apakah event dipilih. Jika tidak, error label yang sesuai muncul 
+				errorLabel.setText("Please choose an event to delete!");
+			}else { // Jika event dipilih, validasi input & refresh table view.
 				// Check apakah berhasil dihapus/ input valid. (panggil method di admin controller)
 				Boolean valid = adminController.deleteEvent(tempId, connect);
 
 				if (valid) { // jika valid confirmasi lewat error label
 					errorLabel.setText("Data deleted!");
 				}else { // jika tidak valid munculkan error label yang sesuai
-					errorLabel.setText("Enter a valid id!");
+					errorLabel.setText("Failed!");
 				}
 				//refresh table
 				viewAllEvent();

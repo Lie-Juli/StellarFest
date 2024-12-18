@@ -51,16 +51,6 @@ public class Admin extends User{
 		return false;
 	}
 	
-	// Method untuk validasi input 
-	private static boolean isInteger(String id) {
-		try {
-			Integer.parseInt(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
 	// Method untuk mengambil semua user dari database, dan simpan ke eventList
 	public static void getAllUser(ArrayList<User> userList, Connect connect) {
 		userList.clear();
@@ -84,26 +74,18 @@ public class Admin extends User{
 	}
 	
 	// Method untuk menghapus user dari database
-	public static boolean deleteUser(String id, Connect connect) {
-		if (!isInteger(id)) { // Validasi input 
-			return false;
-		}
-		//Select query from DB
-		String querySearch = "SELECT * FROM users WHERE id = ? ";
-		PreparedStatement ps = connect.prepareStatement(querySearch);
+	public static boolean deleteUser(int id, Connect connect) {
+		String query = "DELETE FROM users WHERE id = ?";
+		PreparedStatement ps = connect.prepareStatement(query);
 		
 		try {
-			ps.setString(1, id);
-			ResultSet rs = ps.executeQuery();
-			if(!rs.next()) {
-				return false;
-			}
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		String query = String.format("DELETE FROM users WHERE id = %s", id);
-		connect.execUpdate(query);
-		return true;
+		return false;
 	}
 
 }

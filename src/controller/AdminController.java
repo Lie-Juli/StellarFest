@@ -47,7 +47,7 @@ public class AdminController { // Agak berantakan karena ingin meniru class diag
 	}
 	
 	// Method untuk menghapus user (panggil admin method)
-	public boolean deleteUser(String id, Connect connect) {
+	public boolean deleteUser(int id, Connect connect) {
 		return Admin.deleteUser(id, connect);
 	}
 	
