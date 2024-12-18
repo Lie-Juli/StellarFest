@@ -54,7 +54,7 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		event_organizedIdLbl = new Label();
 		// untuk mendapatkan data email dan username organizernya 
 		organizer = EventOrganizerController.getOrganizerById(eventSelected.getOrganizerID()); 
-		event_organizedIdLbl.setText("Event Organizer: " + organizer.getUsername() + " (" + organizer.getEmail() + ")");
+		event_organizedIdLbl.setText("Event Organizer: " + organizer.getUsername() + " (Email: " + organizer.getEmail() + ")");
 			
 		event_descriptionLbl = new Label();
 		event_descriptionLbl.setText("Event Description: ");
