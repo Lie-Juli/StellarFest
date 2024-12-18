@@ -88,7 +88,7 @@ public class LoginView{
 						else if(user.getRole().equals("guest")) {
 							new GuestView(stage, user);
 						}
-						//// jika user seller akan menuju page yang bisa diakses vendor
+						// jika user seller akan menuju page yang bisa diakses vendor
 						else if(user.getRole().equals("vendor")) {
 							errorLbl.setText("User Found");
 						}

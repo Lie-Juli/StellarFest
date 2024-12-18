@@ -154,7 +154,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 				}
 			}
 		};
-}
+	}
 
 	// hal yang dilakukan ketika menekan suatu button
 	@Override
@@ -211,7 +211,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 				new AddVendorView(stage, organizer, eventSelected);
 			}
 		}
-		
+		// jika menekan tombol detail akan mengecek apakah ada event yang terpilih, jika iya baru mendredirect ke Detail view
 		else if(event.getSource() == DetailsBtn) {
 			if(eventSelected == null) {
 				errorLbl.setText("Please Choose an event to view the details");

@@ -133,7 +133,7 @@ public class UserView implements EventHandler<ActionEvent>{
 	public void handle(ActionEvent event) {
 		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
 			if (idInput.getText().equals("")) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
-				errorLabel.setText("Input vield can't be empty!");
+				errorLabel.setText("Input field can't be empty!");
 				
 			}else { // Jika input field tidak kosong, validasi input & refresh table view.
 				String id = idInput.getText();
@@ -164,6 +164,5 @@ public class UserView implements EventHandler<ActionEvent>{
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
 		}
-		
 	}
 }

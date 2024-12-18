@@ -12,10 +12,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableSelectionModel;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -39,7 +42,7 @@ public class EventView implements EventHandler<ActionEvent>{
 	private Button deleteBtn;
 	private Button viewEventBtn;
 	private Button viewUserBtn;
-	private Button logoutBtn, changeProfileBtn;
+	private Button logoutBtn, changeProfileBtn, DetailsBtn;
 	
 	private Connect connect = Connect.getInstance();
 	private AdminController adminController = new AdminController();
@@ -47,6 +50,8 @@ public class EventView implements EventHandler<ActionEvent>{
 	private User user;
 	
 	private ArrayList<Event> eventList;
+	private int tempId;
+	private Event eventSelected = null;
 	
 	// Inisialisasi component
 	public void init() {
@@ -69,10 +74,13 @@ public class EventView implements EventHandler<ActionEvent>{
 		logoutBtn.setOnAction(this);
 		changeProfileBtn = new Button("Change Profile");
 		changeProfileBtn.setOnAction(this);
+		DetailsBtn = new Button("Details");
+		DetailsBtn.setOnAction(this);
 		
 		table = new TableView<Event>();
+		table.setOnMouseClicked(tableMouseEvent());
 		
-		vbox = new VBox(10, titleLabel, flowContainer, table,  idLabel, idInput, deleteBtn, errorLabel);
+		vbox = new VBox(10, titleLabel, flowContainer, table,  idLabel, idInput, deleteBtn, errorLabel, DetailsBtn);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -132,6 +140,24 @@ public class EventView implements EventHandler<ActionEvent>{
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	// untuk mendapatkan data suatu event dari table hanya dengan click menggunakan mouse
+	private EventHandler<MouseEvent> tableMouseEvent(){
+			
+			return new EventHandler<MouseEvent>() {
+	
+				@Override
+				public void handle(MouseEvent event) {
+					// TODO Auto-generated method stub
+					TableSelectionModel<Event> tsm = table.getSelectionModel();
+					tsm.setSelectionMode(SelectionMode.SINGLE);
+					eventSelected = tsm.getSelectedItem();
+					if(eventSelected != null) {
+						tempId = eventSelected.getId();
+					}
+				}
+			};
+		}
 
 	
 	// Handling events, button-button click listener
@@ -141,7 +167,7 @@ public class EventView implements EventHandler<ActionEvent>{
 		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
 			
 			if (idInput.getText().equals("")) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
-				errorLabel.setText("Input vield can't be empty!");
+				errorLabel.setText("Input field can't be empty!");
 				
 			}else { // Jika input field tidak kosong, validasi input & refresh table view.
 				String id = idInput.getText();
@@ -171,7 +197,15 @@ public class EventView implements EventHandler<ActionEvent>{
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
 		}
-		
+		// jika menekan tombol detail akan mengecek apakah ada event yang terpilih, jika iya baru mendredirect ke Detail view
+		else if(event.getSource() == DetailsBtn) {
+			if(eventSelected == null) {
+				errorLabel.setText("Please Choose an event to view the details");
+			}
+			else {
+				new ViewEventDetailView(stage, user, tempId);
+			}
+		}
 		
 	}
 	
