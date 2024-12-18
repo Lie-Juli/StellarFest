@@ -181,7 +181,10 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 			// Check apakah berhasil diedit/ input valid. (panggil method di event organizer controller)
 			boolean valid = eventOrganizerController.editEventName(tempId, newEventName);
 			
-			if (valid) {
+			if(eventSelected == null) {
+				errorLbl.setText("Please Choose an Event to edit name");
+			}
+			else if (valid) {
 				errorLbl.setText("Name Changed.");
 				refreshTable();
 			}else {
