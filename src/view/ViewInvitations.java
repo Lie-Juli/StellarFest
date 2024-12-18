@@ -1,6 +1,9 @@
 package view;
 
+import controller.EventOrganizerController;
 import controller.GuestController;
+import controller.InvitationController;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Event;
 import model.Invitation;
 import model.User;
 
@@ -71,8 +75,6 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	
 	// untuk membuat layout table
 	private void setTable() {
-		ObservableList<Invitation> invitations = guestController.viewPendingInvitations(guest.getUserID());
-
         TableColumn<Invitation, Integer> idColumn = new TableColumn<>("Invitation ID");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("invitation_id"));
         idColumn.setMinWidth(vbox.getWidth() / 4);
@@ -84,9 +86,18 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
         TableColumn<Invitation, String> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("invitation_status"));
         statusColumn.setMinWidth(vbox.getWidth() / 4);
+        
+        TableColumn<Invitation, String> roleColumn = new TableColumn<>("Role");
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("invitation_role"));
+        roleColumn.setMinWidth(vbox.getWidth() / 4);
 
-        table.getColumns().addAll(idColumn, eventIdColumn, statusColumn);
-        table.setItems(invitations);
+        table.getColumns().addAll(idColumn, eventIdColumn, statusColumn, roleColumn);
+	}
+	
+	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
+	public void refreshTable() {
+		ObservableList<Invitation> invitations = InvitationController.viewPendingInvitations(guest.getUserID());
+		table.setItems(invitations);
 	}
 	
 	// pembuatan stage
@@ -96,6 +107,7 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		init();
 		addComponent();
 		setTable();
+		refreshTable();
 		stage.setTitle("View Invitations");
 		stage.setScene(scene);
 		stage.show();
@@ -124,7 +136,7 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
             Invitation selectedInvitation = table.getSelectionModel().getSelectedItem();
             if (selectedInvitation != null) {
                 guestController.acceptInvitation(selectedInvitation.getInvitation_id());
-                setTable(); // Refresh the table
+                refreshTable();
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an invitation to accept.", ButtonType.OK);
                 alert.show();

@@ -90,8 +90,12 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
         TableColumn<Event, String> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateColumn.setMinWidth(vbox.getWidth() / 4);
+        
+        TableColumn<Event, String> locationColumn = new TableColumn<Event, String>("Location");
+		locationColumn.setCellValueFactory(new PropertyValueFactory<Event, String>("location"));
+		locationColumn.setMinWidth(vbox.getWidth()/4);
 
-        table.getColumns().addAll(idColumn, nameColumn, dateColumn);
+        table.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
         table.setItems(events);
 	}
 	
@@ -107,22 +111,23 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 		stage.show();
 	}
 	
-private EventHandler<MouseEvent> tableMouseEvent(){
-		
-	return new EventHandler<MouseEvent>() {
-
-		@Override
-		public void handle(MouseEvent event) {
-			// TODO Auto-generated method stub
-			TableSelectionModel<Event> tsm = table.getSelectionModel();
-			tsm.setSelectionMode(SelectionMode.SINGLE);
-			eventSelected = tsm.getSelectedItem();
-			if(eventSelected != null) {
-				tempId = eventSelected.getId();
+	// untuk mendapatkan data suatu event dari table hanya dengan click menggunakan mouse
+	private EventHandler<MouseEvent> tableMouseEvent(){
+			
+		return new EventHandler<MouseEvent>() {
+	
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				TableSelectionModel<Event> tsm = table.getSelectionModel();
+				tsm.setSelectionMode(SelectionMode.SINGLE);
+				eventSelected = tsm.getSelectedItem();
+				if(eventSelected != null) {
+					tempId = eventSelected.getId();
+				}
 			}
-		}
-	};
-}
+		};
+	}
 
 	// hal yang dilakukan ketika menekan suatu button
 	@Override
