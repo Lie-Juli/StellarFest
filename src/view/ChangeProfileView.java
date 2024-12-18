@@ -24,7 +24,7 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 	private PasswordField oldPasswordTxt, newPasswordTxt;
 	private FlowPane flowContainer;
 	private VBox vbox;
-	private Button changeProfileBtn, changeProfileBtnPage, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn;
+	private Button changeProfileBtn, changeProfileBtnPage, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn;
 	private User user = null;
 		
 	//menginisialisasi komponen dan pembuatan scene
@@ -64,6 +64,10 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		viewEventBtn.setOnAction(this);
 		viewUserBtn = new Button("View Users");
 		viewUserBtn.setOnAction(this);
+		viewInvitationsBtn = new Button("View Invitations");
+		viewInvitationsBtn.setOnAction(this);
+		viewAcceptedEventsBtn = new Button("View Events");
+		viewAcceptedEventsBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, emailLbl, emailTxt, usernameLbl, usernameTxt, oldPasswordLbl, oldPasswordTxt, newPasswordLbl, newPasswordTxt, changeProfileBtn, errorLbl);
 		vbox.setPadding(new Insets(10));
@@ -80,6 +84,10 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		if(user.getRole().equals("admin")) {
 			flowContainer.getChildren().add(viewEventBtn);
 			flowContainer.getChildren().add(viewUserBtn);
+		}
+		if(user.getRole().equals("guest")) {
+			flowContainer.getChildren().add(viewInvitationsBtn);
+			flowContainer.getChildren().add(viewAcceptedEventsBtn);
 		}
 		flowContainer.getChildren().add(changeProfileBtnPage);
 		flowContainer.getChildren().add(logoutBtn);
@@ -110,6 +118,14 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 			new EventView(stage, user);
 		}else if (event.getSource() == viewUserBtn) { // Jika button yang di click adalah view user button, redirect ke page user view page
 			new UserView(stage, user);
+		}
+		// jika menekan tombol View Events akan menredirect ke ViewAcceptedEvents
+		if(event.getSource() == viewAcceptedEventsBtn) {
+			new ViewAcceptedEvents(stage, user);
+		}
+		// jika menekan tombol View Invitations akan menredirect ke ViewInvitations
+		else if(event.getSource() == viewInvitationsBtn) {
+			new ViewInvitations(stage, user);
 		}
 		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
 		else if(event.getSource() == changeProfileBtnPage) {

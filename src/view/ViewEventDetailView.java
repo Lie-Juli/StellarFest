@@ -25,7 +25,7 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 	private FlowPane flowContainer;
 	private GridPane grid;
 	private Label event_idLbl, event_nameLbl, event_dateLbl, event_locationLbl, event_descriptionLbl, event_descriptionContentLbl, event_organizedIdLbl, vendorListLbl, guestListLbl;
-	private Button changeProfileBtn, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn;
+	private Button changeProfileBtn, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn;
 	private TableView<User> vendorTable, guestTable;
 	private VBox vbox;
 		
@@ -85,6 +85,10 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		viewEventBtn.setOnAction(this);
 		viewUserBtn = new Button("View Users");
 		viewUserBtn.setOnAction(this);
+		viewInvitationsBtn = new Button("View Invitations");
+		viewInvitationsBtn.setOnAction(this);
+		viewAcceptedEventsBtn = new Button("View Events");
+		viewAcceptedEventsBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, event_idLbl, event_nameLbl, event_dateLbl, event_locationLbl, event_organizedIdLbl, event_descriptionLbl, event_descriptionContentLbl, grid);
 		vbox.setPadding(new Insets(10)); 
@@ -101,6 +105,10 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		if(user.getRole().equals("admin")) {
 			flowContainer.getChildren().add(viewEventBtn);
 			flowContainer.getChildren().add(viewUserBtn);
+		}
+		if(user.getRole().equals("guest")) {
+			flowContainer.getChildren().add(viewInvitationsBtn);
+			flowContainer.getChildren().add(viewAcceptedEventsBtn);
 		}
 		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
@@ -173,6 +181,14 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 			new EventView(stage, user);
 		}else if (event.getSource() == viewUserBtn) { // Jika button yang di click adalah view user button, redirect ke page user view page
 			new UserView(stage, user);
+		}
+		// jika menekan tombol View Events akan menredirect ke ViewAcceptedEvents
+		if(event.getSource() == viewAcceptedEventsBtn) {
+			new ViewAcceptedEvents(stage, user);
+		}
+		// jika menekan tombol View Invitations akan menredirect ke ViewInvitations
+		else if(event.getSource() == viewInvitationsBtn) {
+			new ViewInvitations(stage, user);
 		}
 		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
 		else if(event.getSource() == changeProfileBtn) {
