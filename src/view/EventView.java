@@ -36,9 +36,7 @@ public class EventView implements EventHandler<ActionEvent>{
 	private VBox vbox;
 	private TableView<Event> table;
 	private Label titleLabel;
-	private Label idLabel;
 	private Label errorLabel;
-	private TextField idInput;
 	private Button deleteBtn;
 	private Button viewEventBtn;
 	private Button viewUserBtn;
@@ -60,9 +58,7 @@ public class EventView implements EventHandler<ActionEvent>{
 		flowContainer = new FlowPane();
 		
 		titleLabel = new Label("View Events Page");
-		idLabel = new Label("Event Id: ");
 		errorLabel = new Label();
-		idInput = new TextField();
 		
 		deleteBtn = new Button("Delete");
 		deleteBtn.setOnAction(this);
@@ -80,7 +76,7 @@ public class EventView implements EventHandler<ActionEvent>{
 		table = new TableView<Event>();
 		table.setOnMouseClicked(tableMouseEvent());
 		
-		vbox = new VBox(10, titleLabel, flowContainer, table,  idLabel, idInput, deleteBtn, errorLabel, DetailsBtn);
+		vbox = new VBox(10, titleLabel, flowContainer, table, deleteBtn, errorLabel, DetailsBtn);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -166,14 +162,11 @@ public class EventView implements EventHandler<ActionEvent>{
 		
 		if (event.getSource() == deleteBtn) { // Check jika button yang di click adalah delete button
 			
-			if (idInput.getText().equals("")) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
-				errorLabel.setText("Input field can't be empty!");
-				
+			if (eventSelected == null) { // Check apakah input fieldnya kosong. Jika iya, error label yang sesuai muncul 
+				errorLabel.setText("Please Choose an event to delete!");
 			}else { // Jika input field tidak kosong, validasi input & refresh table view.
-				String id = idInput.getText();
-				
 				// Check apakah berhasil dihapus/ input valid. (panggil method di admin controller)
-				Boolean valid = adminController.deleteEvent(id, connect);
+				Boolean valid = adminController.deleteEvent(tempId, connect);
 
 				if (valid) { // jika valid confirmasi lewat error label
 					errorLabel.setText("Data deleted!");

@@ -214,10 +214,10 @@ public class EventOrganizer extends User{
 		return "add guest success";
 	}
 	
-	// fungsi untuk mengambil semua user yang memiliki role guest yang sudah diinvite pada suatu event tertentu
+	// fungsi untuk mengambil semua user yang memiliki role guest yang sudah menerima invitation pada suatu event tertentu
 	public static ArrayList<User> getGuestByTransactionID(int eventID){
 		guestList.clear();
-		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'guest' AND invitations.event_id = ? ORDER BY users.id ASC";
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'guest' AND invitations.event_id = ? AND invitations.invitation_status = 'accepted' ORDER BY users.id ASC";
 		PreparedStatement ps = con.prepareStatement(query);
 		
 		try {
@@ -238,10 +238,10 @@ public class EventOrganizer extends User{
 		return guestList;
 	}
 	
-	// fungsi untuk mengambil semua user yang memiliki role vendor yang sudah diinvite pada suatu event tertentu
+	// fungsi untuk mengambil semua user yang memiliki role vendor yang sudah menerima invitation pada suatu event tertentu
 	public static ArrayList<User> getVendorByTransactionID(int eventID){
 		vendorList.clear();
-		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'vendor' AND invitations.event_id = ? ORDER BY users.id ASC";
+		String query = "SELECT * FROM users LEFT JOIN invitations ON users.id = invitations.user_id WHERE users.role = 'vendor' AND invitations.event_id = ? AND invitations.invitation_status = 'accepted' ORDER BY users.id ASC";
 		PreparedStatement ps = con.prepareStatement(query);
 		
 		try {

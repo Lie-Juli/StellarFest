@@ -36,26 +36,19 @@ public class Admin extends User{
 	}
 	
 	// Method untuk menghapus event dari database
-	public static boolean deleteEvent(String id, Connect connect) {
-		if (!isInteger(id)) { // Validasi input 
-			return false;
-		}
-		//Select query from DB
-		String querySearch = "SELECT * FROM events WHERE id = ? ";
-		PreparedStatement ps = connect.prepareStatement(querySearch);
+	public static boolean deleteEvent(int id, Connect connect) {
+		String query = "DELETE FROM events WHERE event_id = ?";
+		PreparedStatement ps = connect.prepareStatement(query);
 		
 		try {
-			ps.setString(1, id);
-			ResultSet rs = ps.executeQuery();
-			if(!rs.next()) {
-				return false;
-			}
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		String query = String.format("DELETE FROM events WHERE id = %s", id);
-		connect.execUpdate(query);
-		return true;
+		
+		return false;
 	}
 	
 	// Method untuk validasi input 

@@ -37,7 +37,7 @@ public class AdminController { // Agak berantakan karena ingin meniru class diag
 	}
 	
 	// Method untuk menghapus event (panggil admin method)
-	public boolean deleteEvent(String id, Connect connect) {
+	public boolean deleteEvent(int id, Connect connect) {
 		return Admin.deleteEvent(id, connect);
 	}
 	
