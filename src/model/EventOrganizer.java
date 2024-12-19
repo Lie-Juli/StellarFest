@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
 import util.Connect;
 
 public class EventOrganizer extends User{
-	private static Connect con = getCon();
+	private static Connect con = Connect.getInstance();
 	
 	// // data-data apa saja yang dimiliki event organizer
 	private static ArrayList<Event> eventsCreated = new ArrayList<Event>();

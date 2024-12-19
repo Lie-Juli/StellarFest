@@ -3,16 +3,16 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Event;
-import model.Guest;
+import model.Vendor;
 
-public class GuestController {
-    // View accepted events
+public class VendorController {
+	 // View accepted events
     public static ObservableList<Event> viewAcceptedEvents(int userId) {
-        return FXCollections.observableArrayList(Guest.viewAcceptedEvents(userId));
+        return FXCollections.observableArrayList(Vendor.viewAcceptedEvents(userId));
     }
 
     // Accept an invitation
     public static void acceptInvitation(int invitationId) {
-        Guest.acceptInvitation(invitationId);
+        Vendor.acceptInvitation(invitationId);
     }
 }

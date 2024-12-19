@@ -25,7 +25,7 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 	private FlowPane flowContainer;
 	private GridPane grid;
 	private Label event_idLbl, event_nameLbl, event_dateLbl, event_locationLbl, event_descriptionLbl, event_descriptionContentLbl, event_organizedIdLbl, vendorListLbl, guestListLbl;
-	private Button changeProfileBtn, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn;
+	private Button changeProfileBtn, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn, manageProductBtn;
 	private TableView<User> vendorTable, guestTable;
 	private VBox vbox;
 		
@@ -89,6 +89,8 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		viewInvitationsBtn.setOnAction(this);
 		viewAcceptedEventsBtn = new Button("View Events");
 		viewAcceptedEventsBtn.setOnAction(this);
+		manageProductBtn = new Button("Manage Product");
+		manageProductBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, event_idLbl, event_nameLbl, event_dateLbl, event_locationLbl, event_organizedIdLbl, event_descriptionLbl, event_descriptionContentLbl, grid);
 		vbox.setPadding(new Insets(10)); 
@@ -109,6 +111,11 @@ public class ViewEventDetailView implements EventHandler<ActionEvent>{
 		if(user.getRole().equals("guest")) {
 			flowContainer.getChildren().add(viewInvitationsBtn);
 			flowContainer.getChildren().add(viewAcceptedEventsBtn);
+		}
+		if(user.getRole().equals("vendor")) {
+			flowContainer.getChildren().add(viewInvitationsBtn);
+			flowContainer.getChildren().add(viewAcceptedEventsBtn);
+			flowContainer.getChildren().add(manageProductBtn);
 		}
 		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);

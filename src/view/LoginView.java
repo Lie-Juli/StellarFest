@@ -90,7 +90,7 @@ public class LoginView{
 						}
 						// jika user seller akan menuju page yang bisa diakses vendor
 						else if(user.getRole().equals("vendor")) {
-							errorLbl.setText("User Found");
+							new ViewInvitations(stage, user);
 						}
 					}
 				}

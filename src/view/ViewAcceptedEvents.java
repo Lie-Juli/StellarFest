@@ -1,6 +1,7 @@
 package view;
 
 import controller.GuestController;
+import controller.VendorController;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,10 +31,9 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 	private VBox vbox;
 	private TableView<Event> table;
 	private Button viewInvitationsBtn, viewAcceptedEventsBtn, changeProfileBtn;
-	private Button detailsBtn, logoutBtn;
+	private Button detailsBtn, logoutBtn, manageProductBtn;
 	
-	private User guest = null;
-	private GuestController guestController = new GuestController();
+	private User user = null;
 	private int tempId;
 	private Event eventSelected = null;
 	
@@ -60,6 +60,8 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 		logoutBtn = new Button("Logout");
 		logoutBtn.setOnAction(this);
 		
+		manageProductBtn = new Button("Manage Product");
+		manageProductBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, table, flowContainerBot);
 		vbox.setPadding(new Insets(10));
@@ -70,6 +72,9 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 	private void addComponent() {
 		flowContainer.getChildren().add(viewInvitationsBtn);
 		flowContainer.getChildren().add(viewAcceptedEventsBtn);
+		if(user.getRole().equals("vendor")) {
+			flowContainer.getChildren().add(manageProductBtn);
+		}
 		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
 		flowContainerBot.getChildren().add(detailsBtn);
@@ -77,7 +82,14 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 	
 	// untuk membuat layout table
 	private void setTable() {
-		ObservableList<Event> events = guestController.viewAcceptedEvents(guest.getUserID());
+		ObservableList<Event> events = null;
+		if(user.getRole().equals("vendor")) {
+			events = VendorController.viewAcceptedEvents(user.getUserID());
+		}
+		else if(user.getRole().equals("guest")) {
+			events = GuestController.viewAcceptedEvents(user.getUserID());
+		}
+		
 
 		TableColumn<Event, Integer> idColumn = new TableColumn<>("ID");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -102,7 +114,7 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 	// pembuatan stage
 	public ViewAcceptedEvents(Stage stage, User user) {
 		this.stage = stage;
-		guest = user;
+		this.user = user;
 		init();
 		addComponent();
 		setTable();
@@ -134,15 +146,15 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent event) {
 		// jika menekan tombol View Events akan menredirect ke ViewAcceptedEvents
 		if(event.getSource() == viewAcceptedEventsBtn) {
-			new ViewAcceptedEvents(stage, guest);
+			new ViewAcceptedEvents(stage, user);
 		}
 		// jika menekan tombol View Invitations akan menredirect ke ViewInvitations
 		else if(event.getSource() == viewInvitationsBtn) {
-			new ViewInvitations(stage, guest);
+			new ViewInvitations(stage, user);
 		}
 		// jika menekan tombol Change Profile akan menredirect ke ChangeProfileView
 		else if(event.getSource() == changeProfileBtn) {
-			new ChangeProfileView(stage, guest);
+			new ChangeProfileView(stage, user);
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
@@ -151,7 +163,7 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 		else if (event.getSource() == detailsBtn) {
 			Event selectedEvent = table.getSelectionModel().getSelectedItem();
 	        if (selectedEvent != null) {
-	        	new ViewEventDetailView(stage, guest, tempId);
+	        	new ViewEventDetailView(stage, user, tempId);
 	        } else {
 	            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an event to view details.", ButtonType.OK);
 	            alert.show();

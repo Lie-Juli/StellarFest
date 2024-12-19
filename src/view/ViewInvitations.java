@@ -3,6 +3,7 @@ package view;
 import controller.EventOrganizerController;
 import controller.GuestController;
 import controller.InvitationController;
+import controller.VendorController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,10 +32,9 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	private VBox vbox;
 	private TableView<Invitation> table;
 	private Button viewInvitationsBtn, viewAcceptedEventsBtn, changeProfileBtn;
-	private Button acceptBtn, logoutBtn;
+	private Button acceptBtn, logoutBtn, manageProductBtn;
 	
-	private User guest = null;
-	private GuestController guestController = new GuestController();
+	private User user = null;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
@@ -58,6 +58,8 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		logoutBtn = new Button("Logout");
 		logoutBtn.setOnAction(this);
 		
+		manageProductBtn = new Button("Manage Product");
+		manageProductBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, table, flowContainerBot);
 		vbox.setPadding(new Insets(10));
@@ -68,6 +70,9 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	private void addComponent() {
 		flowContainer.getChildren().add(viewInvitationsBtn);
 		flowContainer.getChildren().add(viewAcceptedEventsBtn);
+		if(user.getRole().equals("vendor")) {
+			flowContainer.getChildren().add(manageProductBtn);
+		}
 		flowContainer.getChildren().add(changeProfileBtn);
 		flowContainer.getChildren().add(logoutBtn);
 		flowContainerBot.getChildren().add(acceptBtn);
@@ -96,14 +101,14 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	
 	// untuk menrefresh data di table dan menambahkan data terbaru agar sesuai database selalu up to date
 	public void refreshTable() {
-		ObservableList<Invitation> invitations = InvitationController.viewPendingInvitations(guest.getUserID());
+		ObservableList<Invitation> invitations = InvitationController.viewPendingInvitations(user.getUserID());
 		table.setItems(invitations);
 	}
 	
 	// pembuatan stage
 	public ViewInvitations(Stage stage, User user) {
 		this.stage = stage;
-		guest = user;
+		this.user = user;
 		init();
 		addComponent();
 		setTable();
@@ -118,15 +123,15 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent event) {
 		// jika menekan tombol View Events akan menredirect ke ViewAcceptedEvents
 		if(event.getSource() == viewAcceptedEventsBtn) {
-			new ViewAcceptedEvents(stage, guest);
+			new ViewAcceptedEvents(stage, user);
 		}
 		// jika menekan tombol View Invitations akan menredirect ke ViewInvitations
 		else if(event.getSource() == viewInvitationsBtn) {
-			new ViewInvitations(stage, guest);
+			new ViewInvitations(stage, user);
 		}
 		// jika menekan tombol Change Profile akan menredirect ke ChangeProfileView
 		else if(event.getSource() == changeProfileBtn) {
-			new ChangeProfileView(stage, guest);
+			new ChangeProfileView(stage, user);
 		}
 		else if(event.getSource() == logoutBtn) { // Logout jika ditekan
 			new LoginView(stage);
@@ -135,7 +140,13 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		else if (event.getSource() == acceptBtn) {
             Invitation selectedInvitation = table.getSelectionModel().getSelectedItem();
             if (selectedInvitation != null) {
-                guestController.acceptInvitation(selectedInvitation.getInvitation_id());
+            	if(user.getRole().equals("vendor")) {
+            		VendorController.acceptInvitation(selectedInvitation.getInvitation_id());
+        		}
+        		else if(user.getRole().equals("guest")) {
+        			GuestController.acceptInvitation(selectedInvitation.getInvitation_id());
+        		}
+                
                 refreshTable();
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an invitation to accept.", ButtonType.OK);

@@ -24,7 +24,7 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 	private PasswordField oldPasswordTxt, newPasswordTxt;
 	private FlowPane flowContainer;
 	private VBox vbox;
-	private Button changeProfileBtn, changeProfileBtnPage, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn;
+	private Button changeProfileBtn, changeProfileBtnPage, logoutBtn, viewOrganizedEventBtn, createEventPageBtn, viewEventBtn, viewUserBtn, viewInvitationsBtn, viewAcceptedEventsBtn, manageProductBtn;
 	private User user = null;
 		
 	//menginisialisasi komponen dan pembuatan scene
@@ -68,6 +68,8 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		viewInvitationsBtn.setOnAction(this);
 		viewAcceptedEventsBtn = new Button("View Events");
 		viewAcceptedEventsBtn.setOnAction(this);
+		manageProductBtn = new Button("Manage Product");
+		manageProductBtn.setOnAction(this);
 		
 		vbox = new VBox(10, flowContainer, emailLbl, emailTxt, usernameLbl, usernameTxt, oldPasswordLbl, oldPasswordTxt, newPasswordLbl, newPasswordTxt, changeProfileBtn, errorLbl);
 		vbox.setPadding(new Insets(10));
@@ -88,6 +90,11 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		if(user.getRole().equals("guest")) {
 			flowContainer.getChildren().add(viewInvitationsBtn);
 			flowContainer.getChildren().add(viewAcceptedEventsBtn);
+		}
+		if(user.getRole().equals("vendor")) {
+			flowContainer.getChildren().add(viewInvitationsBtn);
+			flowContainer.getChildren().add(viewAcceptedEventsBtn);
+			flowContainer.getChildren().add(manageProductBtn);
 		}
 		flowContainer.getChildren().add(changeProfileBtnPage);
 		flowContainer.getChildren().add(logoutBtn);
