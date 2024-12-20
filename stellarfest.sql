@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2024 at 11:16 AM
+-- Generation Time: Dec 20, 2024 at 10:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -73,27 +73,48 @@ CREATE TABLE `invitations` (
 INSERT INTO `invitations` (`invitation_id`, `event_id`, `user_id`, `invitation_status`, `invitation_role`) VALUES
 (1, 1, 6, 'not accepted', 'vendor'),
 (2, 2, 6, 'not accepted', 'vendor'),
-(3, 5, 6, 'not accepted', 'vendor'),
+(3, 5, 6, 'accepted', 'vendor'),
 (4, 5, 7, 'not accepted', 'vendor'),
 (5, 5, 5, 'accepted', 'guest'),
 (6, 5, 8, 'accepted', 'guest'),
 (7, 3, 8, 'not accepted', 'guest'),
 (8, 3, 5, 'accepted', 'guest'),
-(9, 7, 8, 'not accepted', 'guest'),
-(10, 7, 6, 'not accepted', 'vendor'),
+(9, 7, 8, 'accepted', 'guest'),
+(10, 7, 6, 'accepted', 'vendor'),
 (14, 1, 5, 'not accepted', 'guest'),
 (15, 1, 9, 'not accepted', 'guest'),
 (16, 1, 7, 'not accepted', 'vendor'),
-(17, 2, 5, 'not accepted', 'guest'),
-(18, 2, 9, 'not accepted', 'guest'),
+(17, 2, 5, 'accepted', 'guest'),
+(18, 2, 9, 'accepted', 'guest'),
 (19, 3, 3, 'not accepted', 'vendor'),
-(20, 3, 7, 'not accepted', 'vendor'),
-(21, 7, 5, 'not accepted', 'guest'),
-(22, 6, 6, 'not accepted', 'vendor'),
+(20, 3, 7, 'accepted', 'vendor'),
+(21, 7, 5, 'accepted', 'guest'),
+(22, 6, 6, 'accepted', 'vendor'),
 (23, 7, 7, 'not accepted', 'vendor'),
-(30, 8, 5, 'not accepted', 'guest'),
-(31, 8, 8, 'not accepted', 'guest'),
-(32, 8, 6, 'not accepted', 'vendor');
+(30, 8, 5, 'accepted', 'guest'),
+(31, 8, 8, 'accepted', 'guest'),
+(32, 8, 6, 'accepted', 'vendor');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(100) NOT NULL,
+  `product_description` varchar(255) NOT NULL,
+  `vendor_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `vendor_id`) VALUES
+(7, 'Egg Combo', 'An Omelet with scrambled egg inside', 6);
 
 -- --------------------------------------------------------
 
@@ -146,6 +167,13 @@ ALTER TABLE `invitations`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`product_id`),
+  ADD KEY `vendor_id` (`vendor_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -161,19 +189,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `invitations`
 --
 ALTER TABLE `invitations`
-  MODIFY `invitation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `invitation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
@@ -191,6 +225,12 @@ ALTER TABLE `events`
 ALTER TABLE `invitations`
   ADD CONSTRAINT `invitations_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `invitations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

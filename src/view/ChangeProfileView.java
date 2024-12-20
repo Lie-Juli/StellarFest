@@ -134,6 +134,10 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 		else if(event.getSource() == viewInvitationsBtn) {
 			new ViewInvitations(stage, user);
 		}
+		// Jika button yang di click adalah view products button, redirect ke page manageProduct
+		else if (event.getSource() == manageProductBtn) {
+			new ManageProductView(stage, user);
+		}
 		// jika menekan tombol changeprofle akan menredirect ke changeProfile view
 		else if(event.getSource() == changeProfileBtnPage) {
 			new ChangeProfileView(stage, user);
@@ -148,6 +152,10 @@ public class ChangeProfileView implements EventHandler<ActionEvent>{
 			String username = usernameTxt.getText();
 			String oldPassword = oldPasswordTxt.getText();
 			String newPassword = newPasswordTxt.getText();
+			emailTxt.clear();
+			usernameTxt.clear();
+			oldPasswordTxt.clear();
+			newPasswordTxt.clear();
 			String message = UserController.changeProfile(user, email, username, oldPassword, newPassword);
 			errorLbl.setText(message);
 		}

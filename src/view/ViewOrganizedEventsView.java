@@ -177,6 +177,7 @@ public class ViewOrganizedEventsView implements EventHandler<ActionEvent>{
 		
 		else if (event.getSource() == editNameBtn) { // Melakukan validasi dan query ketika edit name button ditekan
 			String newEventName = editEventNameTf.getText();
+			editEventNameTf.clear();
 			
 			// Check apakah berhasil diedit/ input valid. (panggil method di event organizer controller)
 			boolean valid = eventOrganizerController.editEventName(tempId, newEventName);

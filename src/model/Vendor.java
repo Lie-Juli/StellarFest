@@ -6,11 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import controller.InvitationController;
+import controller.ProductController;
 import util.Connect;
 
 public class Vendor extends User{
 	private static Connect con = Connect.getInstance();
-
+	
 	public Vendor(int userID, String email, String username, String password, String role) {
 		super(userID, email, username, password, role);
 		// TODO Auto-generated constructor stub
@@ -46,5 +47,24 @@ public class Vendor extends User{
     public static void acceptInvitation(int invitationId) {
        InvitationController.acceptInvitation(invitationId);
     }
+    
+    //fungsi untuk memasukan product baru oleh vendor
+  	public static void insertProduct(int vendorId, String productName, String productDescription){
+  		ProductController.insertProduct(vendorId, productName, productDescription);
+  	}
+  	
+  	// untuk mengecek apakah input untuk memasukan product sudah benar atau tidak
+  	public static String checkManageProduct(String productName, String productDescription) {
+  		if(productName.isEmpty()) {
+  			return "Please input product name";
+  		}
+  		if(productDescription.isEmpty()) {
+  			return "Please input a description";
+  		}
+  		if(productDescription.length() > 200) {
+  			return "Description length cannot be more than 200 characther";
+  		}
+		return "Add Product Success";
+  	}
 
 }

@@ -104,6 +104,9 @@ public class CreateEventView implements EventHandler<ActionEvent>{
 			String date = d.toString();
 			String location = locationTxt.getText();
 			String description = descriptionTxt.getText();
+			nameTxt.clear();
+			locationTxt.clear();
+			descriptionTxt.clear();
 			String message = EventOrganizerController.createEvent(name, date, location, description, organizer.getUserID());
 			errorLbl.setText(message);
 		}

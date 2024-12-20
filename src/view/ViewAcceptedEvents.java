@@ -152,6 +152,10 @@ public class ViewAcceptedEvents implements EventHandler<ActionEvent> {
 		else if(event.getSource() == viewInvitationsBtn) {
 			new ViewInvitations(stage, user);
 		}
+		// Jika button yang di click adalah view products button, redirect ke page manageProduct
+		else if (event.getSource() == manageProductBtn) {
+			new ManageProductView(stage, user);
+		}
 		// jika menekan tombol Change Profile akan menredirect ke ChangeProfileView
 		else if(event.getSource() == changeProfileBtn) {
 			new ChangeProfileView(stage, user);
