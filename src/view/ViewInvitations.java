@@ -1,5 +1,6 @@
 package view;
 
+import controller.EventController;
 import controller.EventOrganizerController;
 import controller.GuestController;
 import controller.InvitationController;
@@ -13,9 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableSelectionModel;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -33,15 +38,23 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 	private TableView<Invitation> table;
 	private Button viewInvitationsBtn, viewAcceptedEventsBtn, changeProfileBtn;
 	private Button acceptBtn, logoutBtn, manageProductBtn;
+	private Label eventInfoLbl, event_nameLbl, event_dateLbl, event_locationLbl; 
 	
 	private User user = null;
+	private Invitation selectedInvitation = null;
 	
 	//menginisialisasi komponen dan pembuatan scene
 	public void init() {
 		flowContainer = new FlowPane();
 		flowContainerBot = new FlowPane();
 		
+		eventInfoLbl = new Label();
+		event_nameLbl = new Label();
+		event_dateLbl = new Label();
+		event_locationLbl = new Label();
+		
 		table = new TableView<Invitation>();
+		table.setOnMouseClicked(tableMouseEvent());
 		
 		viewInvitationsBtn = new Button("View Invitations");
 		viewInvitationsBtn.setOnAction(this);
@@ -61,7 +74,7 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		manageProductBtn = new Button("Manage Product");
 		manageProductBtn.setOnAction(this);
 		
-		vbox = new VBox(10, flowContainer, table, flowContainerBot);
+		vbox = new VBox(10, flowContainer, table, eventInfoLbl, event_nameLbl, event_dateLbl, event_locationLbl, flowContainerBot);
 		vbox.setPadding(new Insets(10));
 		scene = new Scene(vbox, 700, 500);
 	}
@@ -117,6 +130,29 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	// untuk mendapatkan data suatu invitation dari table dan mengisi informasi mengenai event yang terkait invitation itu hanya dengan click menggunakan mouse
+	private EventHandler<MouseEvent> tableMouseEvent(){
+				
+		return new EventHandler<MouseEvent>() {
+		
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				TableSelectionModel<Invitation> tsm = table.getSelectionModel();
+				tsm.setSelectionMode(SelectionMode.SINGLE);
+				selectedInvitation = tsm.getSelectedItem();
+				if(selectedInvitation != null) {
+					Event event_selected = EventController.viewEventDetail(selectedInvitation.getEvent_id());
+					
+					eventInfoLbl.setText("Event Info");
+					event_nameLbl.setText("Event Name: " + event_selected.getName());
+					event_dateLbl.setText("Event Date: " + event_selected.getDate());
+					event_locationLbl.setText("Event Location: " + event_selected.getLocation());
+				}
+			}
+		};
+	}
 
 	// hal yang dilakukan ketika menekan suatu button
 	@Override
@@ -138,7 +174,6 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
 		}
 		// jika menekan tombol Accept Invitation akan mendelete Invitationnya dan mendapat akses untuk melihat eventnya di ViewAcceptedEvents
 		else if (event.getSource() == acceptBtn) {
-            Invitation selectedInvitation = table.getSelectionModel().getSelectedItem();
             if (selectedInvitation != null) {
             	if(user.getRole().equals("vendor")) {
             		VendorController.acceptInvitation(selectedInvitation.getInvitation_id());
@@ -152,6 +187,10 @@ public class ViewInvitations implements EventHandler<ActionEvent> {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an invitation to accept.", ButtonType.OK);
                 alert.show();
             }
+            eventInfoLbl.setText("");
+			event_nameLbl.setText("");
+			event_dateLbl.setText("");
+			event_locationLbl.setText("");
         }
 	}
 }
